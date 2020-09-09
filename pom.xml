@@ -19,14 +19,25 @@
         <tomcat.version>8.5.37</tomcat.version>
     </properties>
 
-
-
     <!-- Add typical dependencies for a web application -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- 스프링 data-jpa -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.21</version>
+        </dependency>
+
 
     </dependencies>
 
@@ -53,6 +64,7 @@
                         <configuration>
                             <sources>
                                 <source>backend/src/main/java</source>
+                                <source>backend/src/main/resources</source>
                             </sources>
                         </configuration>
                     </execution>
