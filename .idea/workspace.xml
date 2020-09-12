@@ -49,7 +49,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4eb7278f-2113-45b8-a35d-ac0011aa8f42" name="Default Changelist" comment="2020-09-12 react bootstrap 적용 및 가이드 작성" />
+    <list default="true" id="4eb7278f-2113-45b8-a35d-ac0011aa8f42" name="Default Changelist" comment="2020-09-12 NtDev UI설계 pdf 및 erd 업데이트">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -107,13 +110,14 @@
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/backend/src/test" />
-      <recent name="$PROJECT_DIR$/backend" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/frontend/ntdev_react_app/src" />
       <recent name="$PROJECT_DIR$/backend/src/main/resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs" />
+      <recent name="$PROJECT_DIR$/backend/src/test" />
+      <recent name="$PROJECT_DIR$/backend" />
     </key>
   </component>
   <component name="RunManager" selected="Application.NtDeviceManagerApplication">
@@ -175,6 +179,7 @@
       <workItem from="1599629874526" duration="2253000" />
       <workItem from="1599649661493" duration="19000" />
       <workItem from="1599879221102" duration="1138000" />
+      <workItem from="1599887109410" duration="79000" />
     </task>
     <task id="LOCAL-00001" summary="2020-09-09 NtDevice 기본 환경 구성 &#10;backend : spring boot&#10;orm : jpa&#10;db : mysql&#10;front : react">
       <created>1599630618221</created>
@@ -190,7 +195,14 @@
       <option name="project" value="LOCAL" />
       <updated>1599885975377</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="2020-09-12 NtDev UI설계 pdf 및 erd 업데이트">
+      <created>1599886537263</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1599886537263</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -254,7 +266,8 @@
     <MESSAGE value="2020-07-12&#10;프로젝트 스프링 부트 + 리액트 기본 구성" />
     <MESSAGE value="2020-09-09 NtDevice 기본 환경 구성 &#10;backend : spring boot&#10;orm : jpa&#10;db : mysql&#10;front : react" />
     <MESSAGE value="2020-09-12 react bootstrap 적용 및 가이드 작성" />
-    <option name="LAST_COMMIT_MESSAGE" value="2020-09-12 react bootstrap 적용 및 가이드 작성" />
+    <MESSAGE value="2020-09-12 NtDev UI설계 pdf 및 erd 업데이트" />
+    <option name="LAST_COMMIT_MESSAGE" value="2020-09-12 NtDev UI설계 pdf 및 erd 업데이트" />
   </component>
   <component name="WindowStateProjectService">
     <state x="803" y="469" key="#Assign_Data_Sources" timestamp="1599375579718">
@@ -390,10 +403,11 @@
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
     <state x="384" y="153" key="SettingsEditor/0.23.1792.1097@0.23.1792.1097" timestamp="1599376528572" />
-    <state x="496" y="300" key="Vcs.Push.Dialog.v2" timestamp="1599886083496">
-      <screen x="0" y="0" width="1792" height="1120" />
+    <state x="496" y="317" key="Vcs.Push.Dialog.v2" timestamp="1599886554195">
+      <screen x="0" y="23" width="1792" height="1097" />
     </state>
     <state x="496" y="300" key="Vcs.Push.Dialog.v2/0.0.1792.1120@0.0.1792.1120" timestamp="1599886083496" />
+    <state x="496" y="317" key="Vcs.Push.Dialog.v2/0.23.1792.1097@0.23.1792.1097" timestamp="1599886554195" />
     <state x="100" y="100" width="1592" height="920" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1599881821878">
       <screen x="0" y="0" width="1792" height="1120" />
     </state>
