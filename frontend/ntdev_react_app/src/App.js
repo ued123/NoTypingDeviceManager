@@ -2,6 +2,8 @@
 import React, { Component} from 'react';
 import LoginTemplate from './components/login/LoginTemplate';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 class App extends Component {
 
   state = {
@@ -31,5 +33,7 @@ class App extends Component {
         <TodosManager></TodosManager>
     );*/
   }
+
+
 }
 export default App;

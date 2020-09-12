@@ -1,6 +1,10 @@
 import React, { Component} from 'react';
-import  './LoginTemplate.css';
+//import  './LoginTemplate.css';
 import axios from 'axios';
+
+import { Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+
 
 class LoginTemplate extends Component {
   // 초기화
@@ -75,11 +79,34 @@ class LoginTemplate extends Component {
     */
     return (
       <main className="login-form">
-        <h1>Login</h1>
-    		<input type="text" name="user.username" placeholder="Username" onChange={this.doChange}/>
-				<input type="password" name="user.password" placeholder="Password" onChange={this.doChange}/>
-        <input value="로그인" className="doLogin" type="submit" onClick={this.doLogin}/>
-        <input value="회원가입" className="register" type="submit" onClick={this.doReister}/>
+        {/*<h1>장비관리자 페이지</h1>*/}
+        <h1>장비관리자페이지</h1>
+    	{/*	<input type="text" name="user.username" placeholder="Username" onChange={this.doChange}/>*/}
+		{/*		<input type="password" name="user.password" placeholder="Password" onChange={this.doChange}/>*/}
+        {/*<input value="로그인" className="doLogin" type="submit" onClick={this.doLogin}/>*/}
+        {/*<input value="회원가입" className="register" type="submit" onClick={this.doReister}/>*/}
+
+
+        <Form>
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>Email address</Form.Label>
+            <Form.Control type="email" placeholder="Enter email" />
+            <Form.Text className="text-muted">
+              We'll never share your email with anyone else.
+            </Form.Text>
+          </Form.Group>
+
+          <Form.Group controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control type="password" placeholder="Password" />
+          </Form.Group>
+          <Form.Group controlId="formBasicCheckbox">
+            <Form.Check type="checkbox" label="Check me out" />
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
       </main>
 
     );
