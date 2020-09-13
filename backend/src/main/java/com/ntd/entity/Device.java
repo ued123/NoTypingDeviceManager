@@ -1,10 +1,7 @@
 package com.ntd.entity;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
@@ -12,94 +9,91 @@ import java.util.Collection;
 public class Device {
 
     @Id
-    private long device_id;
+    @Column(name = "DEVICE_ID")
+    private long deviceId;
 
-    private String device_category;
+    @Column(name = "DEVICE_CATEGORY")
+    private String deviceCategory;
 
-    private String device_model;
+    @Column(name = "DEVICE_MODEL")
+    private String deviceModel;
 
-    private String device_serial_number;
+    @Column(name = "DEVICE_SERIAL_NUMBER")
+    private String deviceSerialNumber;
 
-    private String cpu_info;
+    @Column(name = "CPU_INFO")
+    private String cpuInfo;
 
-    private String ram_info;
+    @Column(name = "RAM_INFO")
+    private String ramInfo;
 
-    private String volume_info;
+    @Column(name = "VOLUME_INFO")
+    private String volumeInfo;
 
-    private String device_info;
-//
-//    @OneToMany(mappedBy = "device") //참조를 당하는 쪽에서 읽기만 가능!
-//    private Collection<User> members;
-//
-//    public Collection<Device> getMembers() {
-//        return members;
-//    }
+    @Column(name ="DEVICE_INFO")
+    private String deviceInfo;
 
-   /* public void setMembers(Collection<Device> members) {
-        this.members = members;
-    }*/
-//
-   /* public long getDevice_id() {
-        return device_id;
-    }*/
-
-    public void setDevice_id(long device_id) {
-        this.device_id = device_id;
+    public long getDeviceId() {
+        return deviceId;
     }
 
-    public String getDevice_category() {
-        return device_category;
+    public void setDeviceId(long deviceId) {
+        this.deviceId = deviceId;
     }
 
-    public void setDevice_category(String device_category) {
-        this.device_category = device_category;
+    public String getDeviceCategory() {
+        return deviceCategory;
     }
 
-    public String getDevice_model() {
-        return device_model;
+    public void setDeviceCategory(String deviceCategory) {
+        this.deviceCategory = deviceCategory;
     }
 
-    public void setDevice_model(String device_model) {
-        this.device_model = device_model;
+    public String getDeviceModel() {
+        return deviceModel;
     }
 
-    public String getDevice_serial_number() {
-        return device_serial_number;
+    public void setDeviceModel(String deviceModel) {
+        this.deviceModel = deviceModel;
     }
 
-    public void setDevice_serial_number(String device_serial_number) {
-        this.device_serial_number = device_serial_number;
+    public String getDeviceSerialNumber() {
+        return deviceSerialNumber;
     }
 
-    public String getCpu_info() {
-        return cpu_info;
+    public void setDeviceSerialNumber(String deviceSerialNumber) {
+        this.deviceSerialNumber = deviceSerialNumber;
     }
 
-    public void setCpu_info(String cpu_info) {
-        this.cpu_info = cpu_info;
+    public String getCpuInfo() {
+        return cpuInfo;
     }
 
-    public String getRam_info() {
-        return ram_info;
+    public void setCpuInfo(String cpuInfo) {
+        this.cpuInfo = cpuInfo;
     }
 
-    public void setRam_info(String ram_info) {
-        this.ram_info = ram_info;
+    public String getRamInfo() {
+        return ramInfo;
     }
 
-    public String getVolume_info() {
-        return volume_info;
+    public void setRamInfo(String ramInfo) {
+        this.ramInfo = ramInfo;
     }
 
-    public void setVolume_info(String volume_info) {
-        this.volume_info = volume_info;
+    public String getVolumeInfo() {
+        return volumeInfo;
     }
 
-    public String getDevice_info() {
-        return device_info;
+    public void setVolumeInfo(String volumeInfo) {
+        this.volumeInfo = volumeInfo;
     }
 
-    public void setDevice_info(String device_info) {
-        this.device_info = device_info;
+    public String getDeviceInfo() {
+        return deviceInfo;
+    }
+
+    public void setDeviceInfo(String deviceInfo) {
+        this.deviceInfo = deviceInfo;
     }
 }

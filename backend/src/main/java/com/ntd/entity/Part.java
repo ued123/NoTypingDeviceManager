@@ -1,5 +1,6 @@
 package com.ntd.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -9,44 +10,47 @@ import javax.persistence.Table;
 public class Part {
 
     @Id
-    private long part_id;
+    @Column(name = "PARD_ID")
+    private long partId;
 
-    private String part_category;
+    @Column(name = "PART_CATEGORY")
+    private String partCategory;
 
-    private String part_model;
+    @Column(name = "PART_MODEL")
+    private String partModel;
 
-    private String part_manufactor;
+    @Column(name = "PART_MANUFACTOR")
+    private String partManufactor;
 
-    public long getPart_id() {
-        return part_id;
+    public long getPartId() {
+        return partId;
     }
 
-    public void setPart_id(long part_id) {
-        this.part_id = part_id;
+    public void setPartId(long partId) {
+        this.partId = partId;
     }
 
-    public String getPart_category() {
-        return part_category;
+    public String getPartCategory() {
+        return partCategory;
     }
 
-    public void setPart_category(String part_category) {
-        this.part_category = part_category;
+    public void setPartCategory(String partCategory) {
+        this.partCategory = partCategory;
     }
 
-    public String getPart_model() {
-        return part_model;
+    public String getPartModel() {
+        return partModel;
     }
 
-    public void setPart_model(String part_model) {
-        this.part_model = part_model;
+    public void setPartModel(String partModel) {
+        this.partModel = partModel;
     }
 
-    public String getPart_manufactor() {
-        return part_manufactor;
+    public String getPartManufactor() {
+        return partManufactor;
     }
 
-    public void setPart_manufactor(String part_manufactor) {
-        this.part_manufactor = part_manufactor;
+    public void setPartManufactor(String partManufactor) {
+        this.partManufactor = partManufactor;
     }
-
 }

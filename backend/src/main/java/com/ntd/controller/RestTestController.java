@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class TestController {
+public class RestTestController {
 
     @Autowired
     private UserRepository userRepository;
@@ -64,7 +64,7 @@ public class TestController {
 
         return
                 "result entity address:" + device.toString()
-                + "    result cpu info :" + device.get(0).getCpu_info()
+                + "    result cpu info :" + device.get(0).getCpuInfo()
                 + "    deviceRepository connect success";
     }
 

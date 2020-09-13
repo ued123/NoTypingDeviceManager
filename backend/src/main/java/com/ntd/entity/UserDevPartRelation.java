@@ -8,22 +8,23 @@ import javax.persistence.*;
 public class UserDevPartRelation {
 
     @Id
-    private long rel_id;
+    @Column(name = "REL_ID")
+    private long relId;
 
     @ManyToOne(targetEntity = Device.class,fetch = FetchType.LAZY)
-    @JoinColumn(name="device_id")
+    @JoinColumn(name="DEVICE_ID")
     private Device device;
 
     @ManyToOne(targetEntity = Part.class,fetch = FetchType.LAZY)
-    @JoinColumn(name="part_id")
+    @JoinColumn(name="PART_ID")
     private Part part;
 
-    public long getRel_id() {
-        return rel_id;
+    public long getRelId() {
+        return relId;
     }
 
-    public void setRel_id(long rel_id) {
-        this.rel_id = rel_id;
+    public void setRelId(long relId) {
+        this.relId = relId;
     }
 
     public Device getDevice() {

@@ -1,5 +1,6 @@
 package com.ntd.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -9,48 +10,54 @@ import javax.persistence.Table;
 public class User {
 
     @Id
-    private long user_id;
+    @Column(name = "USER_ID")
+    private long uesrId;
 
-    private String user_name;
+    @Column(name = "USER_NAME")
+    private String userName;
 
-    private String user_organ;
+    @Column(name = "USER_ORGAN")
+    private String userOrgan;
 
-    private String user_state;
+    @Column(name = "USER_STATE")
+    private String userState;
 
+    @Column(name = "PASSWORD")
     private String password;
 
-    private String password_type;
+    @Column(name = "PASSWORD_TYPE")
+    private String passwordType;
 
-    public long getId() {
-        return user_id;
+    public long getUesrId() {
+        return uesrId;
     }
 
-    public void setId(long id) {
-        this.user_id = id;
+    public void setUesrId(long uesrId) {
+        this.uesrId = uesrId;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getUser_organ() {
-        return user_organ;
+    public String getUserOrgan() {
+        return userOrgan;
     }
 
-    public void setUser_organ(String user_organ) {
-        this.user_organ = user_organ;
+    public void setUserOrgan(String userOrgan) {
+        this.userOrgan = userOrgan;
     }
 
-    public String getUser_state() {
-        return user_state;
+    public String getUserState() {
+        return userState;
     }
 
-    public void setUser_state(String user_state) {
-        this.user_state = user_state;
+    public void setUserState(String userState) {
+        this.userState = userState;
     }
 
     public String getPassword() {
@@ -61,11 +68,11 @@ public class User {
         this.password = password;
     }
 
-    public String getPassword_type() {
-        return password_type;
+    public String getPasswordType() {
+        return passwordType;
     }
 
-    public void setPassword_type(String password_type) {
-        this.password_type = password_type;
+    public void setPasswordType(String passwordType) {
+        this.passwordType = passwordType;
     }
 }
