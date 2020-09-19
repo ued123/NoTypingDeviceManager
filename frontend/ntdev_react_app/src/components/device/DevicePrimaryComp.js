@@ -13,12 +13,13 @@ class DevicePrimaryComp extends Component {
     /*
     장비 검색후 기본 정보 UI
     */
+    const {devicePart} = this.props;
     return (
-            <li class="list-group-item m-2 labtop-color">
+            <li className="list-group-item m-2 labtop-color">
               <span className="p-2">
                 <img className="magnifier-cmp" src={labtop}/>
               </span>
-              <a href="#" className="black-font">LG-Gram 9401 cpu i7 RAM 8G 번호99</a>
+              <a href="#" className="black-font">{devicePart.primaryName}</a>
             </li>
 
 

@@ -10,16 +10,16 @@ import javax.persistence.Table;
 public class Part {
 
     @Id
-    @Column(name = "PARD_ID")
+    @Column(name = "part_id")
     private long partId;
 
-    @Column(name = "PART_CATEGORY")
+    @Column(name = "part_category")
     private String partCategory;
 
-    @Column(name = "PART_MODEL")
+    @Column(name = "part_model")
     private String partModel;
 
-    @Column(name = "PART_MANUFACTOR")
+    @Column(name = "part_manufactor")
     private String partManufactor;
 
     public long getPartId() {
