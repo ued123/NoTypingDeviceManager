@@ -1,0 +1,33 @@
+.magnifier-cmp {
+	height: 24px;
+}
+.search-text {
+	height: 38px;
+}
+.device-bg-1 {
+	background-color: #e9ecef !important;
+}
+
+.height-100 {
+	height: 100%;
+}
+
+.black-font {
+	color: black;
+}
+.labtop-color {
+	background-color: #b8daff !important;
+}
+
+.detail-title {
+	font-size: 30px !important;
+	font-weight: bolder;
+}
+
+.text-Center {
+	text-align: center;
+}
+
+.border-none {
+	border: none !important;
+}

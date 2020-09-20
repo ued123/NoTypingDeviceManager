@@ -1,36 +1,34 @@
 package com.ntd.entity;
 
-
 import javax.persistence.*;
-import java.util.Collection;
 
 @Entity
 @Table(name = "device")
 public class Device {
 
     @Id
-    @Column(name = "DEVICE_ID")
+    @Column(name = "device_id")
     private long deviceId;
 
-    @Column(name = "DEVICE_CATEGORY")
+    @Column(name = "device_category")
     private String deviceCategory;
 
-    @Column(name = "DEVICE_MODEL")
+    @Column(name = "device_model")
     private String deviceModel;
 
-    @Column(name = "DEVICE_SERIAL_NUMBER")
+    @Column(name = "device_serial_number")
     private String deviceSerialNumber;
 
-    @Column(name = "CPU_INFO")
+    @Column(name = "cpu_info")
     private String cpuInfo;
 
-    @Column(name = "RAM_INFO")
+    @Column(name = "ram_info")
     private String ramInfo;
 
-    @Column(name = "VOLUME_INFO")
+    @Column(name = "volume_info")
     private String volumeInfo;
 
-    @Column(name ="DEVICE_INFO")
+    @Column(name ="device_info")
     private String deviceInfo;
 
     public long getDeviceId() {
