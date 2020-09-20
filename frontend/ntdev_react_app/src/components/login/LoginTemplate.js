@@ -11,7 +11,7 @@ class LoginTemplate extends Component {
   state = {};
 
   goDashBd = () => {
-    this.props.handlePageType("dashborad");
+    this.props.handlePageType("dashboard");
   };
 
   // 로그인후 todos 페이지 이동
@@ -76,12 +76,13 @@ class LoginTemplate extends Component {
   };
 
   render() {
-    const {user} = this.state;
+
     //console.log(this.props);
     /*
       1. submit 버튼을 누르면 todos 페이지로 전환하게 하자
     */
     return (
+
       <main className="login-form">
         {/*<h1>장비관리자 페이지</h1>*/}
 
