@@ -10,8 +10,12 @@ class LoginTemplate extends Component {
   // 초기화
   state = {};
 
+  goDashBd = () => {
+    this.props.handlePageType("dashborad");
+  };
+
   // 로그인후 todos 페이지 이동
-  doLogin = async () => {
+  doLogin = async () => {/*
     // 유저정보 체크
     const {user} = this.state;
 
@@ -38,7 +42,7 @@ class LoginTemplate extends Component {
 
     // 성공시 todos UI 보여주게 state 변경후, App Component에게 전달
     alert("로그인 성공하였습니다.");
-    this.props.handlePageType('todos');
+    this.props.handlePageType('todos');*/
   };
 
   // 회워가입 페이지 이동
@@ -104,7 +108,7 @@ class LoginTemplate extends Component {
             <Form.Group controlId="formBasicCheckbox">
               <Form.Check type="checkbox" label="Check me out" />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" onClick={this.goDashBd}>
               Submit
             </Button>
           </Form>

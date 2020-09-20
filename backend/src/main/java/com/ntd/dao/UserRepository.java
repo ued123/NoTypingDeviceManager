@@ -12,4 +12,6 @@ import javax.persistence.Column;
 public interface UserRepository extends JpaRepository<User,Long> {
 
     User findByUserName (String uesrName);
+
+
 }
