@@ -34,25 +34,7 @@ class Device extends Component {
   };
   // 검색 버튼 질의시 부품장비 리스트 호출
   getDevicePartList = async () => {
-    /*
-    const {devicePartContainer} = this.state;
-    var self = this;
-    await axios({
-      method : 'post',
-      url : '/devicePart/getList',
-      header : {
-        'Content-Type': 'application/json'
-      },
-      data : {
-        "devicePartContainer" : devicePartContainer
-      }
-    }).then(function (response) {
-      const {devicePartList} = response.data;
-      this.setState({"devicePartList" : devicePartList});
-    }).catch(function (error) {
-      alert ("검색중 오류가 발생하여 작업을 중단합니다.");
-    });
-    */
+
   };
 
   render() {
@@ -68,11 +50,11 @@ class Device extends Component {
               col-md viewport width 1000
               col-lg viewport width 1500
             */}
-          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 device-bg-1 height-100">
+          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 height-100">
             {/*
               검색 영역
             */}
-            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopadding">
+            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopadding search">
               <div className="input-group">
                 <div className="input-group-prepend">
                   <span className="input-group-text" id="basic-addon1">
@@ -98,8 +80,8 @@ class Device extends Component {
               col-md viewport width 1000
               col-lg viewport width 1500
             */}
-          <div className="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <div className="row ml-3 device-bg-1 height-100">
+          <div className="col-xs-8 col-sm-8 col-md-8 col-lg-8 device-bg-1 deviceDetailWrapper">
+            <div className="row ml-3 h-100">
               <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 h-25 p-4 text-Center">
                 <h5><span className="badge badge-primary w-50 detail-title p-4">컴퓨터 관리</span></h5>
               </div>

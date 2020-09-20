@@ -39,7 +39,7 @@ class DevicePrimaryCompList extends Component {
     const { devicePartList } = this.state;
 
     return (
-          <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopadding">
+          <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 device-bg-1 nopadding devicePartListWrapper">
             <ul className="list-group w-100">
                 {devicePartList.length > 0 &&
                   devicePartList.map((devicePart) => {

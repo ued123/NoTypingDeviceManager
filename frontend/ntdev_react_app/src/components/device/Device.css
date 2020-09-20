@@ -8,6 +8,22 @@
 	background-color: #e9ecef !important;
 }
 
+.search {
+	height: 50px;
+}
+
+.devicePartListWrapper {
+	height: -moz-calc(100% - 50px);
+	height: -webkit-calc(100% - 50px);
+	height: calc(100% - 50px);
+	overflow-y: scroll;
+}
+
+.deviceDetailWrapper {
+	height: 100%;
+	overflow-y: scroll;
+}
+
 .height-100 {
 	height: 100%;
 }
