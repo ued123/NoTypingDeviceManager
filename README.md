@@ -14,5 +14,5 @@
 # app js에 import
 - import 'bootstrap/dist/css/bootstrap.min.css';
 
-#카카오 오븐 NtDev UI설계 
+# 카카오 오븐 NtDev UI설계 
 https://ovenapp.io/project/LPFsdxSqRffhkxfOCRR9MN45XuGHsAh1#oMGPS
