@@ -1,9 +1,14 @@
 .dashboard-div {
-
     text-align: center;
-
+    background-color: darkgray;
+    height : 100%;
+    weight : 100%;
 }
 
 nav {
     text-align: center;
+}
+
+.magnifier-cmp {
+    height: 100px;
 }

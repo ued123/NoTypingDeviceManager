@@ -13,12 +13,18 @@ public class UserRestController {
     @Autowired
     UserRepository userRepository;
 
-    @RequestMapping(value = "/user.json" , method = RequestMethod.GET)
-    public User ntdevUser(@RequestParam(name = "username") String userName) {
+    @RequestMapping(value = "/login.json" , method = RequestMethod.POST)
+    public boolean ntdevUser(@RequestBody User reqUserInfo) {
 
-        User ntUser = userRepository.findByUserName(userName);
+        User ntUser = userRepository.findByUserName(reqUserInfo.getUserName());
 
-        return ntUser;
+        boolean res = false;
+        if(!(ntUser == null) && ntUser.getPassword().equals(reqUserInfo.getPassword())) {
+
+            res = true;
+        }
+
+        return res;
     }
 
 }

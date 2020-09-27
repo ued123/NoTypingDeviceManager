@@ -3,8 +3,9 @@ import React, { Component} from 'react';
 import './components/common/Common.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginTemplate from "./components/login/LoginTemplate";
-import Device from "./components/device/Device";
+import Device from './components/device/Device';
 import Dashboard from "./components/dashboard/Dashboard";
+import Header from './components/common/Header';
 
 class App extends Component {
 
@@ -21,7 +22,6 @@ class App extends Component {
   render() {
       const {currentCmp} = this.state;
 
-
       if (currentCmp === 'login') {
 
           return (
@@ -30,46 +30,13 @@ class App extends Component {
       } else if (currentCmp == 'dashboard') {
 
           return (
-            <Dashboard/>
+              <div className="container-fluid">
+                  <Header/>
+                  <Dashboard/>
+              </div>
           );
 
-      } else if (currentCmp == 'device') {
-
-          return (<div className="container-fluid">
-
-              <Device/>
-              <footer className="page-footer font-small blue">
-                  <div class="footer-copyright text-center py-3">© 2020 Copyright:
-                      <a href="https://mdbootstrap.com/"> MDBootstrap.com</a>
-                  </div>
-              </footer>
-
-
-          </div>);
       }
   }
-
-
-      /*  if (currentCmp === 'userRegister') {
-          return <UserRegisterTemplate handlePageType = {this.handlePageType}/>;
-        }
-
-        return (
-            <TodosManager></TodosManager>
-        );*/
-
-
-      /*<div className="container-fluid">
-
-              <Device />
-              <footer className="page-footer font-small blue">
-                <div class="footer-copyright text-center py-3">© 2020 Copyright:
-                  <a href="https://mdbootstrap.com/"> MDBootstrap.com</a>
-                </div>
-              </footer>;
-
-            </div>
-          };*/
-
 }
 export default App;

@@ -8,71 +8,49 @@ import { Button } from 'react-bootstrap';
 
 class LoginTemplate extends Component {
   // 초기화
-  state = {};
-
-  goDashBd = () => {
-    this.props.handlePageType("dashboard");
+  state = {
+    username : '',
+    password : ''
   };
 
-  // 로그인후 todos 페이지 이동
-  doLogin = async () => {/*
-    // 유저정보 체크
-    const {user} = this.state;
+  goDashBd = async () => {
 
-    if( user === undefined) {
-      alert("유저정보를 입력해주세요.");
-      return;
-    }
+    // const {user} = this.state;
+
     const response = await axios({
       method : 'post',
-      url : '/login',
+      url : '/login.json',
       header : {
         'Content-Type': 'application/json'
       },
       data : {
-        "username" : user.username,
-        "password" : user.password
+        "userName" : this.state.username,
+        "password" :  this.state.password
       }
     });
 
-    if (response.data.indexOf("400") > -1) {
-      alert("로그인에 실패하였습니다.");
-      return;
+    if(response.data === true) {
+      alert('로그인에 성공 하였습니다');
+      this.props.handlePageType('dashboard');
+    } else if (response.data === false) {
+      alert('로그인에 실패 하였습니다');
     }
 
-    // 성공시 todos UI 보여주게 state 변경후, App Component에게 전달
-    alert("로그인 성공하였습니다.");
-    this.props.handlePageType('todos');*/
+
+
   };
-
-  // 회워가입 페이지 이동
-  doReister = () => {
-    this.props.handlePageType('userRegister');
-  };
-
-
-
 
   doChange = (e) => {
-    // state -> user 아래의 변수에 값 할당
-    // 태그 이름을 쪼개어, state 변수에 할당한다.
-    const dataTypeList = e.target.name.split(".");
-    const value = e.target.value;
-    const dataTypeLeng = dataTypeList.length;
-    let currentDataType = this.state;
-    for (let i=0;i<dataTypeLeng;i++){
-      let dataType = dataTypeList[i];
-      if (i === (dataTypeLeng-1)) {
-          // 변수값 입력
-          currentDataType[dataType] = value;
-          continue;
-      }
 
-      if (currentDataType[dataType] === undefined ) {
-          currentDataType[dataType]= {};
-      }
-      currentDataType = currentDataType[dataType];
+    var inputName = e.target.name;
+    var inputValue = e.target.value;
+
+    if('user.username' === inputName) {
+      this.state.username = inputValue;
+    } else if('user.password' === inputName) {
+      this.state.password = inputValue;
     }
+
   };
 
   render() {
@@ -95,23 +73,29 @@ class LoginTemplate extends Component {
           <h1>장비관리자페이지</h1>
           <Form>
             <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
+              <Form.Label>아이디</Form.Label>
+              <Form.Control type="userId" placeholder="Enter userid" name="user.username" onChange={this.doChange}/>
               <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
+                We'll never share your userId with anyone else.
               </Form.Text>
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" />
+              <Form.Label>비밀번호</Form.Label>
+              <Form.Control type="password" placeholder="Password" name="user.password" onChange={this.doChange}/>
             </Form.Group>
             <Form.Group controlId="formBasicCheckbox">
               <Form.Check type="checkbox" label="Check me out" />
             </Form.Group>
-            <Button variant="primary" type="submit" onClick={this.goDashBd}>
-              Submit
-            </Button>
+
+            <button
+                    type="button" onClick={this.goDashBd}>
+              login
+            </button>
+
+                {/*<Button variant="primary" type="submit" onClick={this.goDashBd}>*/}
+            {/*  Submit*/}
+            {/*</Button>*/}
           </Form>
         </div>
       </main>

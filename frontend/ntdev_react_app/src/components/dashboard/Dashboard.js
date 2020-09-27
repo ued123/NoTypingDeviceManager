@@ -1,37 +1,28 @@
 import React, {Component} from "react";
 import  './Dashboard.css';
-import { Container,Row,Col } from 'react-bootstrap';
-import { Image } from "react-bootstrap";
+import LoginTemplate from "../login/LoginTemplate";
+import Device from "../device/Device";
 
 
 class Dashboard extends Component {
 
-    state = {};
+    state = {
+        currentCmp : 'dashboard'
+    }
+
+    handlePageType = (currentCmp) => {
+        this.setState(
+            {currentCmp : currentCmp}
+        );
+    }
+
 
     render() {
 
-        return <main className="dashboard-div">
+        const {currentCmp} = this.state;
 
-            <nav>
-                <h1> 대시보드 페이지 </h1>
-            </nav>
+        return <div className='dashboard-div'>대시보드</div>
 
-            <Container>
-                <Row>
-                    <Col xs={6} md={4}>
-                        <Image src="desktop.js/171x180" rounded />
-                    </Col>
-                    <Col xs={6} md={4}>
-                        <Image src="holder.js/171x180" roundedCircle />
-                    </Col>
-                    <Col xs={6} md={4}>
-                        <Image src="holder.js/171x180" thumbnail />
-                    </Col>
-                </Row>
-            </Container>
-
-
-        </main>
     }
 
 }
