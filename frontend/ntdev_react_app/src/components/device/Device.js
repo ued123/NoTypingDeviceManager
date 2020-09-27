@@ -1,20 +1,18 @@
 import React, { Component} from 'react';
 import axios from 'axios';
 import DeviceDetailComp from './DeviceDetailComp';
+import DevicePrimarySearch from './DevicePrimarySearch';
 import DevicePrimaryCompList from './DevicePrimaryCompList';
 import magnifier from '../../img/magnifier.png';
 import triangleDown from '../../img/triangleDown.png';
+import triangleUp from '../../img/triangleUp.png';
 import  './Device.css';
 
 
 class Device extends Component {
   // 초기화
   state = {
-    devicePartContainer : {}
-  };
-  // 검색 질의 요청시, 컬럼 정의가 아래와 같이 되어있기떄문,.. 저형태로 씀
-  doSearch = () => {
-    let devicePartContainer = {
+    devicePartContainer : {
             part_id : 0,
             part_category : "",
             part_model : "",
@@ -28,20 +26,42 @@ class Device extends Component {
             volume_info : "",
             device_info : "",
             primaryName : ""
-    };
-
-    this.setSate ({devicePartContainer});
+    },
+    showDetail : false,
+    isSearch : false
   };
-  // 검색 버튼 질의시 부품장비 리스트 호출
-  getDevicePartList = async () => {
+  // 검색 질의 요청시, 컬럼 정의가 아래와 같이 되어있기떄문,.. 저형태로 씀
+  doSearch = () => {
+      this.setState({isSearch : true});
+  };
+  // DevicePrimaryCompList 호출후 isSearch 초기화 로직
+  doSearchInitialize = () => {
+      this.setState({isSearch : false});
+  };
+  // 상세검색
+  searchDetail = () => {
+    const {showDetail} = this.state;
+    let {devicePartContainer} = this.state;
+    devicePartContainer['part_model'] = "";
+    devicePartContainer['device_model'] = "";
+
+    this.setState({
+                    showDetail : !showDetail
+                  });
+    //기본 검색 TEXT 초기화
+    document.getElementsByClassName("search-text")[0].value = "";
+  };
+  // 기본 검색 [part_model, device_model 검색한다.]
+  searchDefault = (e) => {
+    let {devicePartContainer} = this.state;
+    devicePartContainer['part_model'] = e.target.value;
+    devicePartContainer['device_model'] = e.target.value;
 
   };
 
   render() {
-    /*
-      1. submit 버튼을 누르면 todos 페이지로 전환하게 하자
-    */
-    const {devicePartContainer} = this.state;
+    //장비,부품 질의에 필요한 변수, 상세검색 노출 , 검색 체크
+    const {devicePartContainer,showDetail,isSearch} = this.state;
     return (
         <div className="row height-100">
           {/* 검색, 리스트 창 영억
@@ -57,22 +77,22 @@ class Device extends Component {
             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopadding search">
               <div className="input-group">
                 <div className="input-group-prepend">
-                  <span className="input-group-text" id="basic-addon1">
+                  <span className="input-group-text" id="basic-addon1" onClick={this.doSearch}>
                     <img className="magnifier-cmp" src={magnifier}/>
                   </span>
                 </div>
-                <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)" />
+                <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)" onChange={this.searchDefault}/>
                 <div className="input-group-append">
-                  <span className="input-group-text" onClick={this.doSearch}>
-                    <img className="magnifier-cmp" src={triangleDown}/>
+                  <span className="input-group-text" onClick={this.searchDetail}>
+                    <img className="magnifier-cmp" src={showDetail? triangleUp : triangleDown} />
                   </span>
                 </div>
               </div>
+              {/* 세부 검색 영역*/}
+              {showDetail ? <DevicePrimarySearch></DevicePrimarySearch> : null}
             </div>
-            {/*
-              리스트결과 영역
-            */}
-            <DevicePrimaryCompList devicePartContainer = {devicePartContainer}/>
+            {/* 리스트결과 영역 */}
+            <DevicePrimaryCompList devicePartContainer={devicePartContainer} isSearch = {isSearch} doSearchInitialize = {this.doSearchInitialize} />
           </div>
           {/* 장비 상세정보 창 영역
               col-xs viewport width 300

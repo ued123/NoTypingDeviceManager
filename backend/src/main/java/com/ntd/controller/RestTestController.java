@@ -1,10 +1,7 @@
 package com.ntd.controller;
 
-import com.ntd.dao.DeviceRepository;
-import com.ntd.dao.PartRepository;
 import com.ntd.dao.UserDevPartRelRepository;
 import com.ntd.dao.UserRepository;
-import com.ntd.entity.Device;
 import com.ntd.entity.UserDevPartRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +13,6 @@ public class RestTestController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private PartRepository partRepository;
-
-    @Autowired
-    private DeviceRepository deviceRepository;
 
     @Autowired
     private UserDevPartRelRepository userDevPartRelRepository;
@@ -38,12 +29,6 @@ public class RestTestController {
         return "result value:"+userRepository.findAll().size() + "  uesrRepository connect success";
     }
 
-    @RequestMapping(value = "/part")
-    public String part() {
-        //System.out.println(ntDevRepo.findAll().size());
-        return "result value:"+ partRepository.findAll().size() + "  partRepository connect success";
-    }
-
     @RequestMapping(value = "/relation")
     public String relation() {
         //System.out.println(ntDevRepo.findAll().size());
@@ -55,19 +40,5 @@ public class RestTestController {
                 + "result value:" + userDevPartRelations.size()
                         + "  userDevPartRelRepository connect success";
     }
-
-    @RequestMapping(value = "/device")
-    public String device() {
-        //System.out.println(ntDevRepo.findAll().size());
-
-        List<Device> device = deviceRepository.findAll();
-
-        return
-                "result entity address:" + device.toString()
-                + "    result cpu info :" + device.get(0).getCpuInfo()
-                + "    deviceRepository connect success";
-    }
-
-
 
 }

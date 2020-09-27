@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 
-class Device extends Component {
+class Footer extends Component {
 
   render() {
     return (
@@ -11,4 +11,4 @@ class Device extends Component {
     );
   }
 }
-export default Device;
+export default Footer;

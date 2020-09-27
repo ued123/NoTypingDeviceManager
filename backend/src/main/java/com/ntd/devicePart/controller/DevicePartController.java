@@ -25,7 +25,6 @@ import com.ntd.devicePart.service.DevicePartManager;
 @RequestMapping("/devicePart")
 public class DevicePartController {
 
-    
     private final static Logger logger = LoggerFactory.getLogger(DevicePartController.class);
     
     @Autowired private DevicePartManager devicePartManager;
@@ -37,6 +36,7 @@ public class DevicePartController {
 	resultMap.put(Characters.RESULT, Characters.SUCCESS);
 	try {
 	    devicePartManager.getList(resultMap, devicePartContainer);
+	    logger.info("Get DevicePartList");
 	} catch (Exception e) {
 	    logger.warn("Error Process Getting Device, Part DataInfo : {}",e.getMessage(),e);
 	    resultMap.put(Characters.RESULT, Characters.FAIL);

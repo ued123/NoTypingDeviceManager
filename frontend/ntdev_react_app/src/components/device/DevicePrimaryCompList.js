@@ -9,35 +9,47 @@ import DevicePrimaryComp from './DevicePrimaryComp';
 class DevicePrimaryCompList extends Component {
 
     state = {
-      devicePartList : []
+      devicePartList : [],
     };
 
     // 검색 버튼 질의시 부품장비 리스트 호출
     getDevicePartList = async (devicePartContainer) => {
+      // 검색 요청이 없을때 수행하지 않음
+      if (devicePartContainer === null) {
+        return;
+      }
+
       const response = await axios({
         method : 'post',
         url : '/devicePart/getList',
         header : {
           'Content-Type': 'application/json'
         },
-        data : {
-          "devicePartContainer" : devicePartContainer
-        }
+        data : devicePartContainer
       }).catch(function (error) {
         alert ("검색중 오류가 발생하여 작업을 중단합니다.");
       });
+
+      if (response === undefined) {
+        return;
+      }
+
       this.setState ({'devicePartList' : response.data.devicePartList});
     };
 
-  componentDidMount() {
-    const { devicePartContainer } = this.props;
-    this.getDevicePartList(devicePartContainer);
-  }
-
+    componentDidUpdate(prevProps, prevState){
+      const { devicePartContainer,isSearch } = this.props;
+      // 무한루프 방지
+      if (!isSearch) {
+        return;
+      }
+      this.getDevicePartList(devicePartContainer);
+      // devic Component에 있는 search 변수 초기화
+      this.props.doSearchInitialize ();
+    }
 
   render() {
     const { devicePartList } = this.state;
-
     return (
           <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 device-bg-1 nopadding devicePartListWrapper">
             <ul className="list-group w-100">

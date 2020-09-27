@@ -16,6 +16,8 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+    	<maven.compiler.target>1.8</maven.compiler.target>
         <tomcat.version>8.5.37</tomcat.version>
     </properties>
 
@@ -37,7 +39,16 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.21</version>
         </dependency>
-
+        <!-- Query Dsl -->
+        <dependency>
+		    <groupId>com.querydsl</groupId>
+		    <artifactId>querydsl-apt</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.querydsl</groupId>
+		    <artifactId>querydsl-jpa</artifactId>
+		</dependency>
 
     </dependencies>
 
@@ -48,7 +59,18 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<verbose>true</verbose>
+					<fork>true</fork>
+					<!-- JDK PATH , VERSION 설정 -->
+					<executable>C:\\Program Files\\Java\\jdk1.8.0_261\\bin\\javac</executable>
+					<compilerVersion>${properties.java.version}</compilerVersion>
+				</configuration>
+			</plugin>
             <!-- mavend의 기본 자바 경로를 변경하기위한 플러그인 src/main/java를 backend/src/main/java로 변경하기위해 설치한 플러그인-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -70,7 +92,26 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>
+            <plugin>
+			    <groupId>com.mysema.maven</groupId>
+			    <artifactId>apt-maven-plugin</artifactId>
+			    <version>1.1.3</version>
+			    <executions>
+			        <execution>
+			            <goals>
+			                <goal>process</goal>
+			            </goals>
+			            <configuration>
+			                <outputDirectory>target/generated-sources/java</outputDirectory>
+			                <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                            <!-- 사용하고자 하는 JDK의 javac 경로를 지정해준다. -->
+		                    <executable>C:\\Program Files\\Java\\jdk1.8.0_261\\bin\\javac</executable>
+		                    <compilerVersion>${properties.java.version}</compilerVersion>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+		</plugins>
     </build>
 
 

@@ -7,8 +7,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ntd.dao.DeviceRepository;
-import com.ntd.dao.PartRepository;
 import com.ntd.devicePart.params.DevicePartContainer;
 
 /**
@@ -19,9 +17,9 @@ import com.ntd.devicePart.params.DevicePartContainer;
 @Service
 public class DevicePartManager {
 
-    @Autowired private DeviceRepository deviceRepo;
+    @Autowired private DeviceRepositoryImpl deviceRepo;
     
-    @Autowired private PartRepository partRepo;
+    @Autowired private PartRepositoryImpl partRepo;
     
     /**
      * 장비 , 부품 검색 결과를 데이터에 담는 로직
@@ -30,8 +28,9 @@ public class DevicePartManager {
      */
     public void getList (Map<String, Object> resultMap, DevicePartContainer devicePartContainer) {
 	List<Object> devicePartList = new ArrayList<> ();
-	devicePartList.addAll(partRepo.findByPartOnSearch(devicePartContainer));
-	devicePartList.addAll(deviceRepo.findByDeviceOnSearch(devicePartContainer));
+	
+	devicePartList.addAll(partRepo.findAllLike(devicePartContainer));
+	devicePartList.addAll(deviceRepo.findAllLike(devicePartContainer));
 	//  part 리스트 가져오기
 	resultMap.put("devicePartList", devicePartList);
     }
