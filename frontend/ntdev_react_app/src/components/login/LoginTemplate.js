@@ -46,9 +46,6 @@ class LoginTemplate extends Component {
     this.props.handlePageType('userRegister');
   };
 
-
-
-
   doChange = (e) => {
     // state -> user 아래의 변수에 값 할당
     // 태그 이름을 쪼개어, state 변수에 할당한다.

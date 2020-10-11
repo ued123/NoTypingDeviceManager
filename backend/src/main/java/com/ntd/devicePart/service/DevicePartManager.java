@@ -27,11 +27,11 @@ public class DevicePartManager {
      * @param resultMap 
      */
     public void getList (Map<String, Object> resultMap, DevicePartContainer devicePartContainer) {
-	List<Object> devicePartList = new ArrayList<> ();
-	
-	devicePartList.addAll(partRepo.findAllLike(devicePartContainer));
-	devicePartList.addAll(deviceRepo.findAllLike(devicePartContainer));
-	//  part 리스트 가져오기
-	resultMap.put("devicePartList", devicePartList);
+		List<Object> devicePartList = new ArrayList<> ();
+		
+		devicePartList.addAll(partRepo.findAllLike(devicePartContainer));
+		devicePartList.addAll(deviceRepo.findAllLike(devicePartContainer));
+		//  part 리스트 가져오기
+		resultMap.put("devicePartList", devicePartList);
     }
 }

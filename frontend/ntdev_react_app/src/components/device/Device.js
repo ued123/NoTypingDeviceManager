@@ -28,35 +28,23 @@ class Device extends Component {
             primaryName : ""
     },
     showDetail : false,
-    isSearch : false
+    isSearch : true,
+    devicePrimaryCompListIsMount : false
   };
+
   // 검색 질의 요청시, 컬럼 정의가 아래와 같이 되어있기떄문,.. 저형태로 씀
-  doSearch = () => {
-      this.setState({isSearch : true});
+  doSearch = (devicePartContainer) => {
+      this.setState({isSearch : true,
+                     'devicePartContainer' : devicePartContainer
+                    });
   };
+
   // DevicePrimaryCompList 호출후 isSearch 초기화 로직
   doSearchInitialize = () => {
-      this.setState({isSearch : false});
-  };
-  // 상세검색
-  searchDetail = () => {
-    const {showDetail} = this.state;
-    let {devicePartContainer} = this.state;
-    devicePartContainer['part_model'] = "";
-    devicePartContainer['device_model'] = "";
-
-    this.setState({
-                    showDetail : !showDetail
-                  });
-    //기본 검색 TEXT 초기화
-    document.getElementsByClassName("search-text")[0].value = "";
-  };
-  // 기본 검색 [part_model, device_model 검색한다.]
-  searchDefault = (e) => {
-    let {devicePartContainer} = this.state;
-    devicePartContainer['part_model'] = e.target.value;
-    devicePartContainer['device_model'] = e.target.value;
-
+      this.setState({
+                      isSearch : false,
+                      devicePrimaryCompListIsMount : true,
+                    });
   };
 
   render() {
@@ -71,26 +59,8 @@ class Device extends Component {
               col-lg viewport width 1500
             */}
           <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 height-100">
-            {/*
-              검색 영역
-            */}
-            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopadding search">
-              <div className="input-group">
-                <div className="input-group-prepend">
-                  <span className="input-group-text" id="basic-addon1" onClick={this.doSearch}>
-                    <img className="magnifier-cmp" src={magnifier}/>
-                  </span>
-                </div>
-                <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)" onChange={this.searchDefault}/>
-                <div className="input-group-append">
-                  <span className="input-group-text" onClick={this.searchDetail}>
-                    <img className="magnifier-cmp" src={showDetail? triangleUp : triangleDown} />
-                  </span>
-                </div>
-              </div>
-              {/* 세부 검색 영역*/}
-              {showDetail ? <DevicePrimarySearch></DevicePrimarySearch> : null}
-            </div>
+            {/*검색 영역 */}
+            <DevicePrimarySearch doSearch = {this.doSearch}></DevicePrimarySearch>
             {/* 리스트결과 영역 */}
             <DevicePrimaryCompList devicePartContainer={devicePartContainer} isSearch = {isSearch} doSearchInitialize = {this.doSearchInitialize} />
           </div>

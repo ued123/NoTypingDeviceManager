@@ -10,6 +10,7 @@ class DevicePrimaryCompList extends Component {
 
     state = {
       devicePartList : [],
+      isChange : false
     };
 
     // 검색 버튼 질의시 부품장비 리스트 호출
@@ -37,6 +38,23 @@ class DevicePrimaryCompList extends Component {
       this.setState ({'devicePartList' : response.data.devicePartList});
     };
 
+    // 첫 렌더링 마친후 일어나느 이벤트
+    componentDidMount(){
+      const { devicePartContainer } = this.props;
+      const { devicePartList, isChange } = this.state;
+      //isChangeconsole.log (devicePrimaryCompListIsMount + "componentDidMount");
+      // 무한루프 방지, APP 실행시 첫 마운트에만 수행
+      if (isChange) {
+        return;
+      }
+      // this.getDevicePartList(devicePartContainer);
+      // devic Component에 있는 search 변수 초기화
+      // this.props.doSearchInitialize ();
+      this.setState ({isChange : true});
+    }
+    //state,props 변경시 일어나는 이벤트
+    // 부모딴에서  비지니스 로직제어해야함
+    // 컴포넌트 변경시 두번의 렌더링 업데이트 수행하므로 제어
     componentDidUpdate(prevProps, prevState){
       const { devicePartContainer,isSearch } = this.props;
       // 무한루프 방지

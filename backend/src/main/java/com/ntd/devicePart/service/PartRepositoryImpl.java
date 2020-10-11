@@ -18,16 +18,16 @@ public class PartRepositoryImpl extends QuerydslRepositorySupport {
 	super(Part.class);
     }
 
-    public List<Part> findAllLike (DevicePartContainer devicePartContainer) {
-	
-	QPart qpart = QPart.part;
-	JPAQueryFactory queryFactory = new JPAQueryFactory(getEntityManager());
-	BooleanBuilder builder = new BooleanBuilder();
-	builder.and(qpart.partModel.contains(devicePartContainer.getPart_model()));
-	if (!devicePartContainer.getPart_manufactor().isEmpty()) {
-	    builder.or(qpart.partManufactor.contains(devicePartContainer.getPart_manufactor()));        
+	public List<Part> findAllLike(DevicePartContainer devicePartContainer) {
+
+		QPart qpart = QPart.part;
+		JPAQueryFactory queryFactory = new JPAQueryFactory(getEntityManager());
+		BooleanBuilder builder = new BooleanBuilder();
+		builder.and(qpart.partModel.contains(devicePartContainer.getPart_model()));
+		if (!devicePartContainer.getPart_manufactor().isEmpty()) {
+			builder.and(qpart.partManufactor.contains(devicePartContainer.getPart_manufactor()));
+		}
+		return queryFactory.selectFrom(qpart).where(builder).fetch();
 	}
-	return queryFactory.selectFrom(qpart).where(builder).fetch();
-    }
 
 }

@@ -29,7 +29,6 @@ public class DevicePartController {
     
     @Autowired private DevicePartManager devicePartManager;
     
-    
     @PostMapping (path = "/getList", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> getList (@RequestBody DevicePartContainer devicePartContainer) {
 	Map<String, Object> resultMap = new HashMap<>();

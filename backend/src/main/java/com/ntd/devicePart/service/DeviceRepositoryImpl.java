@@ -9,6 +9,7 @@ import com.ntd.devicePart.params.DevicePartContainer;
 import com.ntd.entity.Device;
 import com.ntd.entity.QDevice;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
@@ -22,26 +23,28 @@ public class DeviceRepositoryImpl extends QuerydslRepositorySupport {
 	QDevice qdevice = QDevice.device;
 	JPAQueryFactory queryFactory = new JPAQueryFactory(getEntityManager());
 	BooleanBuilder builder = new BooleanBuilder();
-	builder.and(qdevice.deviceModel.contains(devicePartContainer.getDevice_model()));
+	// builder.and(qdevice.deviceModel.contains(devicePartContainer.getDevice_model()));
+	builder.and(qdevice.deviceModel.like('%'+devicePartContainer.getDevice_model()+'%'));
+	
 	// 시리얼 넘버가 존재시 like 질의
 	if (!devicePartContainer.getDevice_serial_number().isEmpty()) {
-	    builder.or(qdevice.deviceSerialNumber.contains(devicePartContainer.getDevice_serial_number()));
+	    builder.and(qdevice.deviceSerialNumber.contains(devicePartContainer.getDevice_serial_number()));
 	}
 	// cpu정보 존재시like 질의
 	if (!devicePartContainer.getCpu_info().isEmpty()) {
-	    builder.or(qdevice.cpuInfo.contains(devicePartContainer.getCpu_info()));
+	    builder.and(qdevice.cpuInfo.contains(devicePartContainer.getCpu_info()));
 	}
 	// RAM정보 존재시like 질의
 	if (!devicePartContainer.getRam_info().isEmpty()) {
-	    builder.or(qdevice.ramInfo.contains(devicePartContainer.getRam_info()));
+	    builder.and(qdevice.ramInfo.contains(devicePartContainer.getRam_info()));
 	}
 	// 볼륨정보 존재시like 질의
 	if (!devicePartContainer.getVolume_info().isEmpty()) {
-	    builder.or(qdevice.volumeInfo.contains(devicePartContainer.getVolume_info()));
+	    builder.and(qdevice.volumeInfo.contains(devicePartContainer.getVolume_info()));
 	}
 	// 장비정보 존재시like 질의
 	if (!devicePartContainer.getDevice_info().isEmpty()) {
-	    builder.or(qdevice.deviceInfo.contains(devicePartContainer.getDevice_info()));
+	    builder.and(qdevice.deviceInfo.contains(devicePartContainer.getDevice_info()));
 	}
 	
 	return queryFactory.selectFrom(qdevice).where(builder).fetch();
