@@ -14,18 +14,14 @@ import  './Device.css';
 */
 class DevicePrimaryComp extends Component {
 
+  // 장비 하나 선택후, DevicePramaryCompList로 전달
+  doSearchOne = (e) => {
+      const {devicePart} = this.props;
+      // 장비 부품 리스트에 devicePart 정보 전달
+      this.props.doSearchOne (devicePart);
+    };
+
   render() {
-    /*
-     * device_category
-     * 			C : 컴퓨터
-     * 			M:  모니터
-     * 			D : DESKTOP
-     *
-     * part_category
-     *          R : ram
-     *          H:  HardDsik
-     *          S:  SSD
-     */
       /*
       장비 검색후 기본 정보 UI
       */
@@ -51,7 +47,7 @@ class DevicePrimaryComp extends Component {
                   }
 
                 </span>
-                <a href="#" className="black-font">{devicePart.primaryName}</a>
+                <a href={void(0)} className="black-font" onClick = {this.doSearchOne}>{devicePart.primaryName}</a>
               </li>
     );
   }

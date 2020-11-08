@@ -24,10 +24,11 @@ class DevicePrimarySearch extends Component {
             ram_info : "",
             volume_info : "",
             device_info : "",
-            primaryName : ""
+            primaryName : "",
+            doSearchDefault : false
     },
     showDetail : false,
-    isSearch : false
+    isSearchList : false
   };
   // 검색 조건 초기화
   searchInitialize = (e) => {
@@ -38,6 +39,8 @@ class DevicePrimarySearch extends Component {
     for (let i=0; i < length; i++) {
       searchTextList[i].value = "";
     }
+    let {devicePartContainer} = this.state;
+    devicePartContainer['doSearchDefault'] = false;
   };
 
 
@@ -61,8 +64,6 @@ class DevicePrimarySearch extends Component {
       }
       currentDataType = currentDataType[dataType];
     }
-    //// DEBUG:
-    // console.log(this.state.devicePartContainer);
   };
 
   // 상세검색
@@ -76,7 +77,7 @@ class DevicePrimarySearch extends Component {
     let searchWrapper = document.getElementsByClassName("search-wrapper")[0];
     devicePartContainer['part_model'] = "";
     devicePartContainer['device_model'] = "";
-
+    devicePartContainer['doSearchDefault'] = false;
     //기본 검색 TEXT 초기화
     document.getElementsByClassName("search-text")[0].value = "";
     // 상세보기 태그 활성화 비활성화
@@ -91,9 +92,16 @@ class DevicePrimarySearch extends Component {
 
   // 기본 검색 [part_model, device_model 검색한다.]
   searchDefault = (e) => {
-    let {devicePartContainer} = this.state;
-    devicePartContainer['part_model'] = e.target.value;
-    devicePartContainer['device_model'] = e.target.value;
+    this.setState ({
+      devicePartContainer : {
+        'part_model' : e.target.value,
+        'device_model' : e.target.value,
+        'doSearchDefault' : true
+      }
+    }, () => {
+      this.props.doSearch (this.state.devicePartContainer);
+    });
+
   };
 
   doSearch = (e) => {
@@ -103,7 +111,6 @@ class DevicePrimarySearch extends Component {
     this.setState({
                     showDetail : false
                   });
-
   }
 
   render() {
@@ -120,7 +127,7 @@ class DevicePrimarySearch extends Component {
     device_info = Characters.BLANK;
 
     */
-    const {showDetail,isSearch} = this.state;
+    const {showDetail,isSearchList} = this.state;
     return (
           <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopadding search">
             {/*일반 검색 및 상세 버튼*/}

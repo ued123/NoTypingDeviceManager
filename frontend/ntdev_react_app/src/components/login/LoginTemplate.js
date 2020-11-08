@@ -1,10 +1,10 @@
 import React, { Component} from 'react';
-//import  './LoginTemplate.css';
+import '../common/Common.css';
+import './LoginTemplate.css';
 import axios from 'axios';
-
-import { Form } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
-
+import { withRouter } from "react-router-dom";
+import { faKey, faCubes, faDollyFlatbed, faUser } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 class LoginTemplate extends Component {
   // 초기화
@@ -19,31 +19,33 @@ class LoginTemplate extends Component {
       alert("유저정보를 입력해주세요.");
       return;
     }
+    // 계정 유효성 검사
     const response = await axios({
       method : 'post',
-      url : '/login',
+      url : '/user/doLogin',
       header : {
         'Content-Type': 'application/json'
       },
       data : {
-        "username" : user.username,
+        "userName" : user.userName,
         "password" : user.password
       }
     });
 
-    if (response.data.indexOf("400") > -1) {
-      alert("로그인에 실패하였습니다.");
+    if (response.data.response.indexOf("403") > -1 || response.data.response.indexOf("500") > -1) {
+      alert(response.data.response);
       return;
     }
 
-    // 성공시 todos UI 보여주게 state 변경후, App Component에게 전달
     alert("로그인 성공하였습니다.");
-    this.props.handlePageType('todos');
+    // 하위컴포넌트에서 redirect시withRouter API import 하여 아래처럼 push
+    this.props.history.push('/device');
   };
 
   // 회워가입 페이지 이동
   doReister = () => {
-    this.props.handlePageType('userRegister');
+    // 하위컴포넌트에서 redirect시withRouter API import 하여 아래처럼 push
+    this.props.history.push('/register');
   };
 
   doChange = (e) => {
@@ -70,43 +72,61 @@ class LoginTemplate extends Component {
 
   render() {
     const {user} = this.state;
-    //console.log(this.props);
-    /*
-      1. submit 버튼을 누르면 todos 페이지로 전환하게 하자
-    */
     return (
-      <main className="login-form">
-        {/*<h1>장비관리자 페이지</h1>*/}
-
-    	{/*	<input type="text" name="user.username" placeholder="Username" onChange={this.doChange}/>*/}
-		{/*		<input type="password" name="user.password" placeholder="Password" onChange={this.doChange}/>*/}
-        {/*<input value="로그인" className="doLogin" type="submit" onClick={this.doLogin}/>*/}
-        {/*<input value="회원가입" className="register" type="submit" onClick={this.doReister}/>*/}
-
-        <div className="container h-100">
-          <h1>장비관리자페이지</h1>
-          <Form>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
-            </Form.Group>
-
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" />
-            </Form.Group>
-            <Form.Group controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
+      <div className="container d-flex justify-content-center h-100">
+        {/* 로그인 Frame*/}
+        <div className="card">
+          <div className="card-header">
+            <h3>장비 관리 서비스</h3>
+            <div className="d-flex justify-content-end social_icon">
+              <span>
+                <FontAwesomeIcon icon={faCubes} />
+              </span>
+              <span>
+                <FontAwesomeIcon icon={faDollyFlatbed} />
+              </span>
+            </div>
+          </div>
+          <div className="card-body">
+            <form>
+              <div className="input-group form-group">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">
+                      <FontAwesomeIcon icon={faUser} />
+                    </span>
+                  </div>
+                  <input type="text" name="user.userName" className="form-control" placeholder="userName" onChange={this.doChange}/>
+                </div>
+               </div>
+               <div className="input-group form-group">
+                 <div className="input-group">
+                   <div className="input-group-prepend">
+                     <span className="input-group-text">
+                       <FontAwesomeIcon icon={faKey} />
+                     </span>
+                   </div>
+                   <input type="text" name="user.password" className="form-control" placeholder="password" onChange={this.doChange}/>
+                 </div>
+                </div>
+                <div className="row align-items-center remember">
+      						<input type="checkbox"/>Remember Me
+      					</div>
+                <div className="form-group">
+                  <input type="button" value="login" className="btn float-right login_btn" onClick={this.doLogin}/>
+                </div>
+            </form>
+          </div>
+          <div className="card-footer">
+            <div class="d-flex justify-content-center links">
+    					Don't have an account?<a href="#">Sign Up</a>
+    				</div>
+            <div class="d-flex justify-content-center">
+    					<a href="#">Forgot your password?</a>
+    				</div>
+          </div>
         </div>
-      </main>
+      </div>
 
     );
   }

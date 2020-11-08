@@ -13,6 +13,12 @@ class DevicePrimaryCompList extends Component {
       isChange : false
     };
 
+    // 장비 하나 선택 후 deviceJs로 전달
+    doSearchOne = (devicePart) => {
+        // console.log (devicePart);
+        this.props.doSearchOne(devicePart);
+    };
+
     // 검색 버튼 질의시 부품장비 리스트 호출
     getDevicePartList = async (devicePartContainer) => {
       // 검색 요청이 없을때 수행하지 않음
@@ -51,16 +57,21 @@ class DevicePrimaryCompList extends Component {
       // devic Component에 있는 search 변수 초기화
       // this.props.doSearchInitialize ();
       this.setState ({isChange : true});
+      // debug
+      //console.log (devicePartContainer.doSearchDefault);
     }
     //state,props 변경시 일어나는 이벤트
     // 부모딴에서  비지니스 로직제어해야함
     // 컴포넌트 변경시 두번의 렌더링 업데이트 수행하므로 제어
     componentDidUpdate(prevProps, prevState){
-      const { devicePartContainer,isSearch } = this.props;
+      let { devicePartContainer,isSearchList } = this.props;
+      // devicePartContainer['doSearchDefault'] = true;
       // 무한루프 방지
-      if (!isSearch) {
+      if (!isSearchList) {
         return;
       }
+      // debug
+      //console.log (devicePartContainer.doSearchDefault);
       this.getDevicePartList(devicePartContainer);
       // devic Component에 있는 search 변수 초기화
       this.props.doSearchInitialize ();
@@ -71,7 +82,7 @@ class DevicePrimaryCompList extends Component {
     return (
           <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 device-bg-1 nopadding devicePartListWrapper">
             <ul className="list-group w-100">
-                {devicePartList.length > 0 &&
+                {devicePartList !== undefined && devicePartList.length > 0 &&
                   devicePartList.map((devicePart) => {
                     if (devicePart.deviceId !== undefined) {
                       devicePart.primaryName = devicePart.deviceModel + ' ' + devicePart.cpuInfo + ' ' + devicePart.ramInfo;
@@ -79,9 +90,7 @@ class DevicePrimaryCompList extends Component {
                       devicePart.primaryName = devicePart.partModel + ' ' + devicePart.partManufactor;
                     }
                 return (
-                      <DevicePrimaryComp
-                        devicePart={devicePart}
-                      />
+                      <DevicePrimaryComp devicePart={devicePart} doSearchOne = {this.doSearchOne}/>
                     );
                   })}
             </ul>

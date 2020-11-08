@@ -18,6 +18,7 @@ import com.ntd.devicePart.service.DevicePartManager;
 
 /**
  * Device-Part FrontEnd-Backend 통신시 비지니스 로직
+ * 
  * @author HoYa
  *
  */
@@ -25,22 +26,37 @@ import com.ntd.devicePart.service.DevicePartManager;
 @RequestMapping("/devicePart")
 public class DevicePartController {
 
-    private final static Logger logger = LoggerFactory.getLogger(DevicePartController.class);
-    
-    @Autowired private DevicePartManager devicePartManager;
-    
-    @PostMapping (path = "/getList", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Object> getList (@RequestBody DevicePartContainer devicePartContainer) {
-	Map<String, Object> resultMap = new HashMap<>();
-	resultMap.put(Characters.RESULT, Characters.SUCCESS);
-	try {
-	    devicePartManager.getList(resultMap, devicePartContainer);
-	    logger.info("Get DevicePartList");
-	} catch (Exception e) {
-	    logger.warn("Error Process Getting Device, Part DataInfo : {}",e.getMessage(),e);
-	    resultMap.put(Characters.RESULT, Characters.FAIL);
+	private final static Logger logger = LoggerFactory.getLogger(DevicePartController.class);
+
+	@Autowired
+	private DevicePartManager devicePartManager;
+
+	@PostMapping(path = "/getList", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> getList(@RequestBody DevicePartContainer devicePartContainer) {
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put(Characters.RESULT, Characters.SUCCESS);
+		try {
+			devicePartManager.getList(resultMap, devicePartContainer);
+			logger.info("Get DevicePartList");
+		} catch (Exception e) {
+			logger.warn("Error Process Getting Device, Part DataInfo : {}", e.getMessage(), e);
+			resultMap.put(Characters.RESULT, Characters.FAIL);
+		}
+		return resultMap;
 	}
-	return resultMap;
-    }
-    
+
+	@PostMapping(path = "/getDevicePart", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> getDevicePart(@RequestBody DevicePartContainer devicePartContainer) {
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put(Characters.RESULT, Characters.SUCCESS);
+		try {
+			devicePartManager.getDevicePart(resultMap, devicePartContainer);
+			logger.info("Get DevicePartOne");
+		} catch (Exception e) {
+			logger.warn("Error Process Getting Device, Part DataInfo : {}", e.getMessage(), e);
+			resultMap.put(Characters.RESULT, Characters.FAIL);
+		}
+		return resultMap;
+	}
+
 }

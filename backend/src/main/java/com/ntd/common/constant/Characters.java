@@ -9,4 +9,7 @@ public class Characters {
     public static final int FAIL = 0;
 
     public static final String RESULT = "result";
+
+    public static final String RESPONSE = "response";
+
 }

@@ -1,16 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import './index.css';
 import App from './App';
-//import 'bootstrap/dist/css/bootstrap.min.css';
-//import * as serviceWorker from './serviceWorker';
-
+import './components/common/Common.css';
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+  <div className="container-fluid">
+      <App />
+     <footer className="page-footer font-small blue">
+       <div className="footer-copyright text-center py-3">© 2020 Copyright:
+         <a href="https://mdbootstrap.com/"> MDBootstrap.com</a>
+       </div>
+     </footer>;
+  </div>
+
   </React.StrictMode>,
   document.getElementById('root')
 );

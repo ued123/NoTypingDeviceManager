@@ -1,42 +1,51 @@
-
-.login-form {
-	width: 300px;
-	margin: 0 auto;
-	font-family: Tahoma, Geneva, sans-serif;
-}
-.login-form h1 {
-	text-align: center;
-	color: #4d4d4d;
-	font-size: 24px;
-	padding: 20px 0 20px 0;
-}
-.login-form input[type="password"],
-.login-form input[type="text"] {
-	width: 100%;
-	padding: 15px;
-	border: 1px solid #dddddd;
-	margin-bottom: 15px;
-	box-sizing:border-box;
-}
-.login-form .doLogin {
-	width: 100%;
-	padding: 15px;
-	background-color: #535b63;
-	border: 0;
-	box-sizing: border-box;
-	cursor: pointer;
-	font-weight: bold;
-	color: #ffffff;
-}
-.login-form .register {
-	width: 100%;
-	padding: 15px;
-	background-color: #00ff00;
-	border: 0;
-	box-sizing: border-box;
-	cursor: pointer;
-	font-weight: bold;
-	color: #ffffff;
+.card {
+    height: 370px;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 400px;
+    background-color: rgba(0,0,0,0.5) !important;
 }
 
+.h3, h3 {
+    font-size: 1.75rem;
+}
 
+.card-header h3 {
+    color: white;
+}
+
+.social_icon {
+    position: absolute;
+    right: 20px;
+    top: -45px;
+}
+
+.social_icon span {
+		font-size: 60px;
+    margin-left: 10px;
+    color: #FFC312;
+}
+
+.input-group-prepend span {
+    width: 50px;
+    background-color: #FFC312;
+    color: black;
+    border: 0 !important;
+}
+
+.remember input {
+    width: 20px;
+    height: 20px;
+    margin-left: 15px;
+    margin-right: 5px;
+}
+
+.login_btn {
+    color: black;
+    background-color: #FFC312 !important;
+    width: 100px !important;
+}
+
+.links {
+    color: white;
+}
