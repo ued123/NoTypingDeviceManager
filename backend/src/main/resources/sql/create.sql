@@ -50,6 +50,8 @@ PRIMARY KEY (user_id)
 
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE user MODIFY password VARCHAR(255);
+
 -- sample
 INSERT INTO user(user_name, user_state, password)
 VALUE ('testAdmin',2,'qwer1234');

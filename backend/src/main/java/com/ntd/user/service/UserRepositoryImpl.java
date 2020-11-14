@@ -30,15 +30,16 @@ public class UserRepositoryImpl extends QuerydslRepositorySupport {
 	 * @param devicePartContainer
 	 * @param devicePartList
 	 */
-	public List<User> findUsers(HttpServletRequest request, UserContainer userContainer) {
-		String urlPath = request.getServletPath();
+	public List<User> findUsers(String condition, UserContainer userContainer) {
 		QUser quser = QUser.user;
 		JPAQueryFactory queryFactory = new JPAQueryFactory(getEntityManager());
 		BooleanBuilder builder = new BooleanBuilder();
 		// 로그인일때 처리
-		if (urlPath.contains("doLogin")) {
+		if (condition.contains("doLogin")) {
 			builder.and(quser.userName.eq(userContainer.getUserName()))
 					.and(quser.password.eq(userContainer.getPassword()));
+		} else if (condition.contains("auth")) {
+			builder.and(quser.userName.eq(userContainer.getUserName()));
 		}
 		// TODO 유저 검색 UI 검색시 질의 만들기
 		return queryFactory.selectFrom(quser).where(builder).fetch();

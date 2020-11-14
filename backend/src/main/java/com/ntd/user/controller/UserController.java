@@ -9,14 +9,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ntd.common.constant.Characters;
-import com.ntd.devicePart.params.DevicePartContainer;
-import com.ntd.devicePart.service.DevicePartManager;
+import com.ntd.config.security.JwtTokenProvider;
 import com.ntd.user.params.UserContainer;
 import com.ntd.user.service.UserManager;
 
@@ -35,15 +40,30 @@ public class UserController {
 	@Autowired
 	private UserManager userManager;
 
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
+
+
 	@PostMapping(path = "/doLogin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> doLogin(HttpServletRequest request, @RequestBody UserContainer userContainer) {
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
-			userManager.doLogin(request, resultMap, userContainer);
+			Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userContainer.getUserName(), userContainer.getPassword()));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			String jwt = jwtTokenProvider.generateToken(authentication);
+			resultMap.put(Characters.AUTHORIZATION, jwt);
+			resultMap.put(Characters.RESPONSE, "200. Success Authentication.");
+		} catch (BadCredentialsException e) {
+			logger.warn("Invalid User Infomation. : {}", e.getMessage(), e);
+			resultMap.put(Characters.RESPONSE, "403. Failrue Authentication. ");
 		} catch (Exception e) {
 			logger.warn("Error Process Login User, UserInfo : {}", e.getMessage(), e);
 			resultMap.put(Characters.RESPONSE, "500. Error Server while login.");
 		}
+
 		return resultMap;
 	}
 

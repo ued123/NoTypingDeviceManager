@@ -15,9 +15,6 @@
     <description>devicemanager project for Spring Boot</description>
 
     <properties>
-        <java.version>1.8</java.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-    	<maven.compiler.target>1.8</maven.compiler.target>
         <tomcat.version>8.5.37</tomcat.version>
     </properties>
 
@@ -43,11 +40,34 @@
         <dependency>
 		    <groupId>com.querydsl</groupId>
 		    <artifactId>querydsl-apt</artifactId>
-		</dependency>
-		
+		</dependency>		
 		<dependency>
 		    <groupId>com.querydsl</groupId>
 		    <artifactId>querydsl-jpa</artifactId>
+		</dependency>
+		 
+		<!-- Spring Security Core -->
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-core</artifactId>
+		</dependency>
+		 
+		<!-- Spring Security Config -->
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-config</artifactId>
+		</dependency>
+		 
+		<!-- Spring Security Web -->
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-web</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+		<dependency>
+		    <groupId>io.jsonwebtoken</groupId>
+		    <artifactId>jjwt</artifactId>
+		    <version>0.9.1</version>
 		</dependency>
 
     </dependencies>
@@ -67,7 +87,7 @@
 					<verbose>true</verbose>
 					<fork>true</fork>
 					<!-- JDK PATH , VERSION 설정 -->
-					<executable>C:\\Program Files\\Java\\jdk1.8.0_261\\bin\\javac</executable>
+					<executable>C:\\Program Files\\ojdkbuild\\java-11-openjdk-11.0.6-1\\bin\\javac</executable>
 					<compilerVersion>${properties.java.version}</compilerVersion>
 				</configuration>
 			</plugin>
@@ -105,7 +125,7 @@
 			                <outputDirectory>target/generated-sources/java</outputDirectory>
 			                <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
                             <!-- 사용하고자 하는 JDK의 javac 경로를 지정해준다. -->
-		                    <executable>C:\\Program Files\\Java\\jdk1.8.0_261\\bin\\javac</executable>
+		                    <executable>C:\\Program Files\\ojdkbuild\\java-11-openjdk-11.0.6-1\\bin\\javac</executable>
 		                    <compilerVersion>${properties.java.version}</compilerVersion>
 			            </configuration>
 			        </execution>

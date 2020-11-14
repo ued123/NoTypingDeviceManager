@@ -23,3 +23,6 @@ table user_device_part_relationship 정의서
 table user 정의서
 
 user_state : 유저 상태 [0: 퇴사,중비, 1:정상 일반우저, 2:장비관리자]
+
+testAdmin@test.com 비밀번호: qwer1234
+
