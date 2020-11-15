@@ -12,6 +12,6 @@ public class Characters {
 
     public static final String RESPONSE = "response";
 
-    public static final String AUTHORIZATION = "authorization";
+    public static final String AUTHORIZATION = "Authorization";
 
 }

@@ -16,3 +16,27 @@ html, body { height:100%;}
 .height-100 {
 	height: 100%;
 }
+
+.headerWrapper {
+	max-height: 50px;
+	min-height: 50px;
+	background-color: #d1e0ed;
+}
+
+.headerFont {
+	font-size: 25px !important;
+	font-weight: 700;
+  line-height: 1;
+	padding: .25em .4em;
+	display: inline-block;
+}
+
+.headerLogo {
+	margin-bottom: 5px;
+	height: 40px;
+	display: inline-block;
+	font-weight: bolder;
+	font-size:30px;
+	font-family: serif;
+	font-style: italic;
+}

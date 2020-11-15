@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.ntd.common.constant.Characters;
 import com.ntd.user.service.UserManager;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -28,13 +29,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Autowired
 	private UserManager userManager;
 
+	
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+
+		String path = request.getServletPath();
+		// JWT 인증 받지 않는 URL 체크 
+		return (path.contains("/doLogin"));
+	}
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
 		try {
 			String jwt = getJWTFromRequest(request);
-
 			if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
 				String userName = jwtTokenProvider.getUserFromJWT(jwt);
 				UserDetails user = userManager.loadUserByUsername(userName);
@@ -55,7 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	 * @return
 	 */
 	private String getJWTFromRequest(HttpServletRequest request) {
-		String token = request.getHeader("Authoriztion");
+		String token = request.getHeader(Characters.AUTHORIZATION);
 		if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
 			return token.substring(7, token.length());
 		}

@@ -3,6 +3,7 @@ import axios from 'axios';
 import DeviceDetailComp from './DeviceDetailComp';
 import DevicePrimarySearch from './DevicePrimarySearch';
 import DevicePrimaryCompList from './DevicePrimaryCompList';
+import Header from '../common/Header';
 import magnifier from '../../img/magnifier.png';
 import triangleDown from '../../img/triangleDown.png';
 import triangleUp from '../../img/triangleUp.png';
@@ -74,6 +75,10 @@ class Device extends Component {
 
     return (
         <div className="row height-100">
+          {/* Header */}
+          <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 pb-2">
+            <Header />
+          </div>
           {/* 검색, 리스트 창 영억
               col-xs viewport width 300
               col-sm viewport width 800

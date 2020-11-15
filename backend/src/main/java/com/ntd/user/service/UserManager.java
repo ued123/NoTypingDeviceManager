@@ -79,8 +79,6 @@ public class UserManager implements UserDetailsService {
 			userAuth.setAccountNonExpired(true);
 			userAuth.setAccountNonLocked(true);
 		}
-		// 비밀번호 암호화, salt + sha256
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		userAuth.setUserName(username);
 		userAuth.setPassword(user.getPassword());
 		userAuth.setAuthorities(getUserRole(Integer.parseInt(user.getUserState())));

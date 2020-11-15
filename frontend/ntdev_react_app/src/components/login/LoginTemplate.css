@@ -26,7 +26,7 @@
     color: #FFC312;
 }
 
-.input-group-prepend span {
+.loginForm .input-group-prepend span {
     width: 50px;
     background-color: #FFC312;
     color: black;

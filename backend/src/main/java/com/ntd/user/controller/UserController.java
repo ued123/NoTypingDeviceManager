@@ -14,7 +14,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +51,7 @@ public class UserController {
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
 			Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userContainer.getUserName(), userContainer.getPassword()));
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+			// SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtTokenProvider.generateToken(authentication);
 			resultMap.put(Characters.AUTHORIZATION, jwt);
 			resultMap.put(Characters.RESPONSE, "200. Success Authentication.");

@@ -1,6 +1,5 @@
 import React, { Component} from 'react';
-import '../common/Common.css';
-import './LoginTemplate.css';
+import styles  from './LoginTemplate.css';
 import axios from 'axios';
 import { withRouter } from "react-router-dom";
 import { faKey, faCubes, faDollyFlatbed, faUser } from "@fortawesome/free-solid-svg-icons"
@@ -36,7 +35,8 @@ class LoginTemplate extends Component {
       alert(response.data.response);
       return;
     }
-
+    // 로그인 성공시 LocalStorage에 jwt 토큰 저장
+    localStorage.setItem("token", response.data.Authorization);
     alert("로그인 성공하였습니다.");
     // 하위컴포넌트에서 redirect시withRouter API import 하여 아래처럼 push
     this.props.history.push('/device');
@@ -74,6 +74,7 @@ class LoginTemplate extends Component {
     const {user} = this.state;
     return (
       <div className="container d-flex justify-content-center h-100">
+      <link rel="stylesheet" type="text/css" href='LoginTemplate.css' />
         {/* 로그인 Frame*/}
         <div className="card">
           <div className="card-header">
@@ -88,7 +89,7 @@ class LoginTemplate extends Component {
             </div>
           </div>
           <div className="card-body">
-            <form>
+            <form className="loginForm">
               <div className="input-group form-group">
                 <div className="input-group">
                   <div className="input-group-prepend">

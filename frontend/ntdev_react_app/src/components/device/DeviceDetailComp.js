@@ -78,12 +78,13 @@ class DeviceDetailComp extends Component {
     if (devicePartContainer === null) {
       return;
     }
-    
+
     const response = await axios({
       method : 'post',
       url : '/devicePart/getDevicePart',
-      header : {
-        'Content-Type': 'application/json'
+      headers : {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       },
       data : devicePartContainer
     }).catch(function (error) {
@@ -93,7 +94,11 @@ class DeviceDetailComp extends Component {
     if (response === undefined) {
       return;
     }
-
+    // 인증 실패한 경우. login창으로 이동
+    if (response.data.response.indexOf("403") > -1) {
+      alert(response.data.response);
+      return;
+    }
     this.setState ({'devicePartContainer' : response.data.devicePart});
   };
 
