@@ -3,6 +3,8 @@ package com.ntd.devicePart.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.security.sasl.AuthenticationException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +41,9 @@ public class DevicePartController {
 		resultMap.put(Characters.RESPONSE, "200. Success OK.");
 		try {
 			if (authentication == null) {
+				logger.info("Error Process Getting Device, Auth Fail. ");
 				resultMap.put(Characters.RESPONSE, "403. Failrue Authentication. ");
-				throw new Exception ("Invalid Token");
+				return resultMap;
 			}
 			devicePartManager.getList(resultMap, devicePartContainer);
 			logger.info("Get DevicePartList");
@@ -58,11 +61,12 @@ public class DevicePartController {
 		resultMap.put(Characters.RESULT, Characters.SUCCESS);
 		resultMap.put(Characters.RESPONSE, "200. Success OK.");
 		try {
-			devicePartManager.getDevicePart(resultMap, devicePartContainer);
 			if (authentication == null) {
+				logger.info("Error Process Getting Device, Auth Fail. ");
 				resultMap.put(Characters.RESPONSE, "403. Failrue Authentication. ");
-				throw new Exception ("Invalid Token");
+				return resultMap;
 			}
+			devicePartManager.getDevicePart(resultMap, devicePartContainer);
 		} catch (Exception e) {
 			logger.warn("Error Process Getting Device, Part DataInfo : {}", e.getMessage(), e);
 			resultMap.put(Characters.RESPONSE, "500. Error internal Server");

@@ -1,5 +1,6 @@
 import React, { Component} from 'react';
 import axios from 'axios';
+import { requestProxy} from '../common/Auth';
 import labtop from '../../img/labtop.png';
 import  './Device.css';
 
@@ -45,7 +46,8 @@ class DeviceDetailComp extends Component {
             // 장비에 매핑되는 parts들
             partList : []
           },
-          isChange : false
+          isChange : false,
+          history : this.props.history,
   };
   // 첫 렌더링 마친후 일어나느 이벤트
   componentDidMount(){
@@ -78,28 +80,15 @@ class DeviceDetailComp extends Component {
     if (devicePartContainer === null) {
       return;
     }
-
-    const response = await axios({
-      method : 'post',
-      url : '/devicePart/getDevicePart',
-      headers : {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
-      },
-      data : devicePartContainer
-    }).catch(function (error) {
-      alert ("검색중 오류가 발생하여 작업을 중단합니다.");
+    const urlInfo = '/devicePart/getDevicePart';
+    const headerInfo = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    };
+    const data = await requestProxy(urlInfo, headerInfo, devicePartContainer, this.state).then(function(res) {
+        return res;
     });
-
-    if (response === undefined) {
-      return;
-    }
-    // 인증 실패한 경우. login창으로 이동
-    if (response.data.response.indexOf("403") > -1) {
-      alert(response.data.response);
-      return;
-    }
-    this.setState ({'devicePartContainer' : response.data.devicePart});
+    this.setState ({'devicePartContainer' : data.devicePart});
   };
 
   render() {

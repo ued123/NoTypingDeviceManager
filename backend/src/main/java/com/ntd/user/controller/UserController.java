@@ -46,6 +46,27 @@ public class UserController {
 	private JwtTokenProvider jwtTokenProvider;
 
 
+	@PostMapping(path = "/doAuth", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> doAuth(HttpServletRequest request, Authentication authentication) {
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			if (authentication == null) {
+				resultMap.put(Characters.RESPONSE, "403. Failrue Authentication. ");
+				throw new Exception ("Invalid Token");
+			}
+			resultMap.put(Characters.RESPONSE, "200. Success Authentication.");
+		} catch (BadCredentialsException e) {
+			logger.warn("Invalid User Infomation. : {}", e.getMessage(), e);
+			resultMap.put(Characters.RESPONSE, "403. Failrue Authentication. ");
+		} catch (Exception e) {
+			logger.warn("Error Process Login User, UserInfo : {}", e.getMessage(), e);
+			resultMap.put(Characters.RESPONSE, "500. Error Server while login.");
+		}
+
+		return resultMap;
+	}
+
+	
 	@PostMapping(path = "/doLogin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> doLogin(HttpServletRequest request, @RequestBody UserContainer userContainer) {
 		Map<String, Object> resultMap = new HashMap<>();

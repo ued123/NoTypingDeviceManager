@@ -23,7 +23,7 @@ class RegisterTemplate extends Component {
     const response = await axios({
       method : 'post',
       url : '/user/doLogin',
-      header : {
+      headers : {
         'Content-Type': 'application/json'
       },
       data : {

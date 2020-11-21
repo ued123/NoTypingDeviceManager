@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import axios from 'axios';
 import DevicePrimaryComp from './DevicePrimaryComp';
-
+import { requestProxy} from '../common/Auth';
 
 /*
 장비 검색시 기본 정보포함 UI 생성
@@ -10,7 +10,9 @@ class DevicePrimaryCompList extends Component {
 
     state = {
       devicePartList : [],
-      isChange : false
+      isChange : false,
+      history : this.props.history,
+      redirectPath : ""
     };
 
     // 장비 하나 선택 후 deviceJs로 전달
@@ -25,60 +27,37 @@ class DevicePrimaryCompList extends Component {
       if (devicePartContainer === null) {
         return;
       }
-
-      const response = await axios({
-        method : 'post',
-        url : '/devicePart/getList',
-        headers : {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        },
-        data : devicePartContainer
-      }).catch(function (error) {
-        alert ("검색중 오류가 발생하여 작업을 중단합니다.");
+      const urlInfo = '/devicePart/getList';
+      const headerInfo = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      };
+      const data = await requestProxy(urlInfo, headerInfo, devicePartContainer, this.state).then(function(res) {
+          return res;
       });
-
-      if (response === undefined) {
-        return;
-      }
-      // 인증 실패한 경우. login창으로 이동
-      if (response.data.response.indexOf("403") > -1) {
-        alert(response.data.response);
-        return;
-      }
-      this.setState ({'devicePartList' : response.data.devicePartList});
+      this.setState ({'devicePartList' : data.devicePartList});
     };
 
-    // 첫 렌더링 마친후 일어나느 이벤트
+    // componentDidUpdate 이후 발생 이벤트
     componentDidMount(){
       const { devicePartContainer } = this.props;
       const { devicePartList, isChange } = this.state;
-      //isChangeconsole.log (devicePrimaryCompListIsMount + "componentDidMount");
-      // 무한루프 방지, APP 실행시 첫 마운트에만 수행
       if (isChange) {
         return;
       }
-      // this.getDevicePartList(devicePartContainer);
-      // devic Component에 있는 search 변수 초기화
-      // this.props.doSearchInitialize ();
+      // device Component에 있는 search 변수 초기화
       this.setState ({isChange : true});
-      // debug
-      //console.log (devicePartContainer.doSearchDefault);
     }
-    //state,props 변경시 일어나는 이벤트
-    // 부모딴에서  비지니스 로직제어해야함
+    // state,props 변경시 일어나는 이벤트
+    // 부모딴에서 비지니스 로직제어해야함
     // 컴포넌트 변경시 두번의 렌더링 업데이트 수행하므로 제어
     componentDidUpdate(prevProps, prevState){
       let { devicePartContainer,isSearchList } = this.props;
-      // devicePartContainer['doSearchDefault'] = true;
       // 무한루프 방지
       if (!isSearchList) {
         return;
       }
-      // debug
-      //console.log (devicePartContainer.doSearchDefault);
       this.getDevicePartList(devicePartContainer);
-      // devic Component에 있는 search 변수 초기화
       this.props.doSearchInitialize ();
     }
 

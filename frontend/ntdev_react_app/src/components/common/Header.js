@@ -2,6 +2,7 @@ import React, { Component} from 'react';
 import Navbar from 'react-bootstrap/Navbar'
 import { faKey, faCubes, faUser, faHome, faTools } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {Link} from 'react-router-dom';
 import toolBox from "../../img/tool-box.png"
 
 class Header extends Component {
@@ -21,14 +22,18 @@ class Header extends Component {
             </span>
           </Navbar.Brand>
           <Navbar.Brand href="#home">
-            <span className=" badge-pill badge-primary headerFont">
-              <FontAwesomeIcon icon={faCubes} /> 장비
-            </span>
+            <Link to="/device">
+              <span className=" badge-pill badge-primary headerFont">
+                <FontAwesomeIcon icon={faCubes} /> 장비
+              </span>
+            </Link>
           </Navbar.Brand>
           <Navbar.Brand href="#home">
-            <span className=" badge-pill badge-primary headerFont">
-              <FontAwesomeIcon icon={faUser} /> 사원
-            </span>
+            <Link to="/user">
+              <span className=" badge-pill badge-primary headerFont">
+                <FontAwesomeIcon icon={faUser} /> 사원
+              </span>
+            </Link>
           </Navbar.Brand>
           <Navbar.Brand href="#home">
             <span className=" badge-pill badge-primary headerFont">
