@@ -33,9 +33,9 @@ public class PartRepositoryImpl extends QuerydslRepositorySupport {
 		QPart qpart = QPart.part;
 		JPAQueryFactory queryFactory = new JPAQueryFactory(getEntityManager());
 		BooleanBuilder builder = new BooleanBuilder();
-		builder.and(qpart.partModel.contains(devicePartContainer.getPart_model()));
-		if (!devicePartContainer.getPart_manufactor().isEmpty()) {
-			builder.and(qpart.partManufactor.contains(devicePartContainer.getPart_manufactor()));
+		builder.and(qpart.partModel.contains(devicePartContainer.getPartModel()));
+		if (!devicePartContainer.getPartManufactor().isEmpty()) {
+			builder.and(qpart.partManufactor.contains(devicePartContainer.getPartManufactor()));
 		}
 		devicePartList.addAll(queryFactory.selectFrom(qpart).where(builder).fetch());
 
@@ -46,26 +46,26 @@ public class PartRepositoryImpl extends QuerydslRepositorySupport {
 	 * @param devicePartContainer
 	 * @param devicePartList
 	 */
-	public void findByPartId(DevicePartContainer devicePartContainer) {
+	public Object findByPartId(DevicePartContainer devicePartContainer) {
 
 		QPart qpart = QPart.part;
 		JPAQueryFactory queryFactory = new JPAQueryFactory(getEntityManager());
 		BooleanBuilder builder = new BooleanBuilder();
-		builder.and(qpart.partId.eq(devicePartContainer.getPart_id()));
+		builder.and(qpart.partId.eq(devicePartContainer.getPartId()));
 		
 		// 부품 클릭시 상세정보 호출
-		if (devicePartContainer.getPart_id() > 0) {
+		if (devicePartContainer.getPartId() > 0) {
 			Part part = queryFactory.selectFrom(qpart).where(builder).fetchOne();
 			if (part != null) {
-				devicePartContainer.setPart_id(part.getPartId());
-				devicePartContainer.setPart_model(part.getPartModel());
-				devicePartContainer.setPart_category(part.getPartCategory());
-				devicePartContainer.setPart_manufactor(part.getPartManufactor());
+				devicePartContainer.setPartId(part.getPartId());
+				devicePartContainer.setPartModel(part.getPartModel());
+				devicePartContainer.setPartCategory(part.getPartCategory());
+				devicePartContainer.setPartManufactor(part.getPartManufactor());
 			}	
 		}
 		// 장비 클릭시 물려있는 정보 호출
 		// TODO devicePart에 있는 key 정보를 바탕으로 호출해야함
-
+		return queryFactory.selectFrom(qpart).where(builder).fetchOne();
 	}
 
 }

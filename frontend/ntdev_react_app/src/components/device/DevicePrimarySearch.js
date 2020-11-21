@@ -12,18 +12,18 @@ import  './Device.css';
 class DevicePrimarySearch extends Component {
   state = {
     devicePartContainer : {
-            part_id : 0,
-            part_category : "",
-            part_model : "",
-            part_manufactor : "",
-            device_id : 0,
-            device_category : "",
-            device_model : "",
-            device_serial_number : "",
-            cpu_info : "",
-            ram_info : "",
-            volume_info : "",
-            device_info : "",
+            partId : 0,
+            partCategory : "",
+            partModel : "",
+            partManufactor : "",
+            deviceId : 0,
+            deviceCategory : "",
+            deviceModel : "",
+            deviceSerialNumber : "",
+            cpuInfo : "",
+            ramInfo : "",
+            volumeInfo : "",
+            deviceInfo : "",
             primaryName : "",
             doSearchDefault : false
     },
@@ -75,8 +75,8 @@ class DevicePrimarySearch extends Component {
 
     let {devicePartContainer} = this.state;
     let searchWrapper = document.getElementsByClassName("search-wrapper")[0];
-    devicePartContainer['part_model'] = "";
-    devicePartContainer['device_model'] = "";
+    devicePartContainer['partModel'] = "";
+    devicePartContainer['deviceModel'] = "";
     devicePartContainer['doSearchDefault'] = false;
     //기본 검색 TEXT 초기화
     document.getElementsByClassName("search-text")[0].value = "";
@@ -94,8 +94,8 @@ class DevicePrimarySearch extends Component {
   searchDefault = (e) => {
     this.setState ({
       devicePartContainer : {
-        'part_model' : e.target.value,
-        'device_model' : e.target.value,
+        'partModel' : e.target.value,
+        'deviceModel' : e.target.value,
         'doSearchDefault' : true
       }
     }, () => {
@@ -153,7 +153,7 @@ class DevicePrimarySearch extends Component {
                       장비 모델
                     </span>
                   </div>
-                  <input type="text" name="devicePartContainer.device_model" className="form-control search-text" aria-label="Amount (to the nearest dollar)" onChange={this.doChange}/>
+                  <input type="text" name="devicePartContainer.deviceModel" className="form-control search-text" aria-label="Amount (to the nearest dollar)" onChange={this.doChange}/>
                 </div>
               </div>
               <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -163,7 +163,7 @@ class DevicePrimarySearch extends Component {
                       CPU 정보
                     </span>
                   </div>
-                  <input type="text" name="devicePartContainer.cpu_info" className="form-control search-text" aria-label="Amount (to the nearest dollar)"  onChange={this.doChange}/>
+                  <input type="text" name="devicePartContainer.cpuInfo" className="form-control search-text" aria-label="Amount (to the nearest dollar)"  onChange={this.doChange}/>
                 </div>
               </div>
               <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -173,7 +173,7 @@ class DevicePrimarySearch extends Component {
                       RAM 정보
                     </span>
                   </div>
-                  <input type="text" name="devicePartContainer.ram_info" className="form-control search-text" onChange={this.doChange}/>
+                  <input type="text" name="devicePartContainer.ramInfo" className="form-control search-text" onChange={this.doChange}/>
                 </div>
               </div>
               <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -183,7 +183,7 @@ class DevicePrimarySearch extends Component {
                       볼륨 정보
                     </span>
                   </div>
-                  <input type="text" name="devicePartContainer.volume_info" className="form-control search-text" onChange={this.doChange}/>
+                  <input type="text" name="devicePartContainer.volumeInfo" className="form-control search-text" onChange={this.doChange}/>
                 </div>
               </div>
               <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -193,7 +193,7 @@ class DevicePrimarySearch extends Component {
                       기타 정보
                     </span>
                   </div>
-                  <input type="text" name="devicePartContainer.device_info" className="form-control search-text" onChange={this.doChange}/>
+                  <input type="text" name="devicePartContainer.deviceInfo" className="form-control search-text" onChange={this.doChange}/>
                 </div>
               </div>
               <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -203,7 +203,7 @@ class DevicePrimarySearch extends Component {
                       부품 모델
                     </span>
                   </div>
-                  <input type="text" name="devicePartContainer.part_model" className="form-control search-text" onChange={this.doChange}/>
+                  <input type="text" name="devicePartContainer.partModel" className="form-control search-text" onChange={this.doChange}/>
                 </div>
               </div>
               <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -213,7 +213,7 @@ class DevicePrimarySearch extends Component {
                       부품 제조사
                     </span>
                   </div>
-                  <input type="text" name="devicePartContainer.part_manufactor" className="form-control search-text" onChange={this.doChange}/>
+                  <input type="text" name="devicePartContainer.partManufactor" className="form-control search-text" onChange={this.doChange}/>
                 </div>
               </div>
 

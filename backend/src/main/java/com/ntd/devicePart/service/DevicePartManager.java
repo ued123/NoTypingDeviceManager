@@ -44,9 +44,11 @@ public class DevicePartManager {
      */
     public void getDevicePart (Map<String, Object> resultMap, DevicePartContainer devicePartContainer) {
 		
-		partRepo.findByPartId(devicePartContainer);
-		deviceRepo.findByDeviceId(devicePartContainer);
+		Object result = partRepo.findByPartId(devicePartContainer);
+		if (result == null) {
+			result = deviceRepo.findByDeviceId(devicePartContainer);
+		}
 		//  part 리스트 가져오기
-		resultMap.put("devicePart", devicePartContainer);
+		resultMap.put("devicePartContainer", result);
     }
 }

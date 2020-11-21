@@ -19,14 +19,14 @@ class DeviceDetailComp extends Component {
   **/
   state = {
     devicePartContainer : {
-            device_id : 0,
-            device_category : "",
-            device_model : "",
-            device_serial_number : "",
-            cpu_info : "",
-            ram_info : "",
-            volume_info : "",
-            device_info : "",
+            deviceId : 0,
+            deviceCategory : "",
+            deviceModel : "",
+            deviceSerialNumber : "",
+            cpuInfo : "",
+            ramInfo : "",
+            volumeInfo : "",
+            deviceInfo : "",
             primaryName : "",
             /*
             device_id : 1,
@@ -39,10 +39,10 @@ class DeviceDetailComp extends Component {
             device_info : "DEIVCEINFOTEST",
             primaryName : "ss",
             */
-            part_id : 0,
-            part_category : "",
-            part_model : "",
-            part_manufactor : "",
+            partId : 0,
+            partCategory : "",
+            partModel : "",
+            partManufactor : "",
             // 장비에 매핑되는 parts들
             partList : []
           },
@@ -88,7 +88,7 @@ class DeviceDetailComp extends Component {
     const data = await requestProxy(urlInfo, headerInfo, devicePartContainer, this.state).then(function(res) {
         return res;
     });
-    this.setState ({'devicePartContainer' : data.devicePart});
+    this.setState ({'devicePartContainer' : data.devicePartContainer});
   };
 
   render() {
@@ -141,7 +141,7 @@ class DeviceDetailComp extends Component {
                   모델명
                 </span>
               </div>
-              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)"  value= {devicePartContainer.device_model}/>
+              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)"  value= {devicePartContainer.deviceModel}/>
             </div>
           </div>
           <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-Center ">
@@ -151,7 +151,7 @@ class DeviceDetailComp extends Component {
                   시리얼넘버
                 </span>
               </div>
-              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)" value= {devicePartContainer.device_serial_number}/>
+              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)" value= {devicePartContainer.deviceSerialNumber}/>
             </div>
           </div>
         </div>
@@ -173,7 +173,7 @@ class DeviceDetailComp extends Component {
                   CPU
                 </span>
                 </div>
-              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)" value= {devicePartContainer.cpu_info}/>
+              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)" value= {devicePartContainer.cpuInfo}/>
             </div>
           </div>
           <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-Center ">
@@ -183,7 +183,7 @@ class DeviceDetailComp extends Component {
                   RAM
                 </span>
               </div>
-              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)"  value= {devicePartContainer.ram_info}/>
+              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)"  value= {devicePartContainer.ramInfo}/>
             </div>
           </div>
           <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-Center ">
@@ -193,7 +193,7 @@ class DeviceDetailComp extends Component {
                   VOLUME
                 </span>
               </div>
-              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)"  value= {devicePartContainer.volume_info}/>
+              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)"  value= {devicePartContainer.volumeInfo}/>
             </div>
           </div>
         </div>

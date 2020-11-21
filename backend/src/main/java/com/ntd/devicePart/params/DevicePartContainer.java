@@ -14,128 +14,128 @@ import com.ntd.entity.Part;
  */
 public class DevicePartContainer {
 
-	private long part_id;
+	private long partId;
 
-	private String part_category = Characters.BLANK;
+	private String partCategory = Characters.BLANK;
 
-	private String part_model = Characters.BLANK;
+	private String partModel = Characters.BLANK;
 
-	private String part_manufactor = Characters.BLANK;
+	private String partManufactor = Characters.BLANK;
 
-	private long device_id;
+	private long deviceId;
 
-	private String device_category = Characters.BLANK;
+	private String deviceCategory = Characters.BLANK;
 
-	private String device_model = Characters.BLANK;
+	private String deviceModel = Characters.BLANK;
 
-	private String device_serial_number = Characters.BLANK;
+	private String deviceSerialNumber = Characters.BLANK;
 
-	private String cpu_info = Characters.BLANK;
+	private String cpuInfo = Characters.BLANK;
 
-	private String ram_info = Characters.BLANK;
+	private String ramInfo = Characters.BLANK;
 
-	private String volume_info = Characters.BLANK;
+	private String volumeInfo = Characters.BLANK;
 
-	private String device_info = Characters.BLANK;
+	private String deviceInfo = Characters.BLANK;
 
 	private boolean doSearchDefault = false;
 
 	private List<Part> partList = new ArrayList<>();
-	
-	public long getPart_id() {
-		return part_id;
+
+	public long getPartId() {
+		return partId;
 	}
 
-	public void setPart_id(long part_id) {
-		this.part_id = part_id;
+	public void setPartId(long partId) {
+		this.partId = partId;
 	}
 
-	public String getPart_category() {
-		return part_category;
+	public String getPartCategory() {
+		return partCategory;
 	}
 
-	public void setPart_category(String part_category) {
-		this.part_category = part_category;
+	public void setPartCategory(String partCategory) {
+		this.partCategory = partCategory;
 	}
 
-	public String getPart_model() {
-		return part_model;
+	public String getPartModel() {
+		return partModel;
 	}
 
-	public void setPart_model(String part_model) {
-		this.part_model = part_model;
+	public void setPartModel(String partModel) {
+		this.partModel = partModel;
 	}
 
-	public String getPart_manufactor() {
-		return part_manufactor;
+	public String getPartManufactor() {
+		return partManufactor;
 	}
 
-	public void setPart_manufactor(String part_manufactor) {
-		this.part_manufactor = part_manufactor;
+	public void setPartManufactor(String partManufactor) {
+		this.partManufactor = partManufactor;
 	}
 
-	public long getDevice_id() {
-		return device_id;
+	public long getDeviceId() {
+		return deviceId;
 	}
 
-	public void setDevice_id(long device_id) {
-		this.device_id = device_id;
+	public void setDeviceId(long deviceId) {
+		this.deviceId = deviceId;
 	}
 
-	public String getDevice_category() {
-		return device_category;
+	public String getDeviceCategory() {
+		return deviceCategory;
 	}
 
-	public void setDevice_category(String device_category) {
-		this.device_category = device_category;
+	public void setDeviceCategory(String deviceCategory) {
+		this.deviceCategory = deviceCategory;
 	}
 
-	public String getDevice_model() {
-		return device_model;
+	public String getDeviceModel() {
+		return deviceModel;
 	}
 
-	public void setDevice_model(String device_model) {
-		this.device_model = device_model;
+	public void setDeviceModel(String deviceModel) {
+		this.deviceModel = deviceModel;
 	}
 
-	public String getDevice_serial_number() {
-		return device_serial_number;
+	public String getDeviceSerialNumber() {
+		return deviceSerialNumber;
 	}
 
-	public void setDevice_serial_number(String device_serial_number) {
-		this.device_serial_number = device_serial_number;
+	public void setDeviceSerialNumber(String deviceSerialNumber) {
+		this.deviceSerialNumber = deviceSerialNumber;
 	}
 
-	public String getCpu_info() {
-		return cpu_info;
+	public String getCpuInfo() {
+		return cpuInfo;
 	}
 
-	public void setCpu_info(String cpu_info) {
-		this.cpu_info = cpu_info;
+	public void setCpuInfo(String cpuInfo) {
+		this.cpuInfo = cpuInfo;
 	}
 
-	public String getRam_info() {
-		return ram_info;
+	public String getRamInfo() {
+		return ramInfo;
 	}
 
-	public void setRam_info(String ram_info) {
-		this.ram_info = ram_info;
+	public void setRamInfo(String ramInfo) {
+		this.ramInfo = ramInfo;
 	}
 
-	public String getVolume_info() {
-		return volume_info;
+	public String getVolumeInfo() {
+		return volumeInfo;
 	}
 
-	public void setVolume_info(String volume_info) {
-		this.volume_info = volume_info;
+	public void setVolumeInfo(String volumeInfo) {
+		this.volumeInfo = volumeInfo;
 	}
 
-	public String getDevice_info() {
-		return device_info;
+	public String getDeviceInfo() {
+		return deviceInfo;
 	}
 
-	public void setDevice_info(String device_info) {
-		this.device_info = device_info;
+	public void setDeviceInfo(String deviceInfo) {
+		this.deviceInfo = deviceInfo;
 	}
 
 	public boolean isDoSearchDefault() {
@@ -160,13 +160,13 @@ public class DevicePartContainer {
 
 	public boolean paramsEmptyByPart() {
 
-		return (part_category.length() + part_manufactor.length() + part_model.length()) == 0;
+		return (partCategory.length() + partManufactor.length() + partModel.length()) == 0;
 	}
 
 	public boolean paramsEmptyByDevice() {
 
-		return (device_category.length() + device_serial_number.length() + device_model.length() + cpu_info.length()
-				+ ram_info.length() + volume_info.length() + device_info.length()) == 0;
+		return (deviceCategory.length() + deviceSerialNumber.length() + deviceModel.length() + cpuInfo.length()
+				+ ramInfo.length() + volumeInfo.length() + deviceInfo.length()) == 0;
 	}
 
 }

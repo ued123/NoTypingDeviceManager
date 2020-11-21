@@ -33,27 +33,27 @@ public class DeviceRepositoryImpl extends QuerydslRepositorySupport {
 		JPAQueryFactory queryFactory = new JPAQueryFactory(getEntityManager());
 		BooleanBuilder builder = new BooleanBuilder();
 		// builder.and(qdevice.deviceModel.contains(devicePartContainer.getDevice_model()));
-		builder.and(qdevice.deviceModel.like('%' + devicePartContainer.getDevice_model() + '%'));
+		builder.and(qdevice.deviceModel.like('%' + devicePartContainer.getDeviceModel() + '%'));
 
 		// 시리얼 넘버가 존재시 like 질의
-		if (!devicePartContainer.getDevice_serial_number().isEmpty()) {
-			builder.and(qdevice.deviceSerialNumber.contains(devicePartContainer.getDevice_serial_number()));
+		if (!devicePartContainer.getDeviceSerialNumber().isEmpty()) {
+			builder.and(qdevice.deviceSerialNumber.contains(devicePartContainer.getDeviceSerialNumber()));
 		}
 		// cpu정보 존재시like 질의
-		if (!devicePartContainer.getCpu_info().isEmpty()) {
-			builder.and(qdevice.cpuInfo.contains(devicePartContainer.getCpu_info()));
+		if (!devicePartContainer.getCpuInfo().isEmpty()) {
+			builder.and(qdevice.cpuInfo.contains(devicePartContainer.getCpuInfo()));
 		}
 		// RAM정보 존재시like 질의
-		if (!devicePartContainer.getRam_info().isEmpty()) {
-			builder.and(qdevice.ramInfo.contains(devicePartContainer.getRam_info()));
+		if (!devicePartContainer.getRamInfo().isEmpty()) {
+			builder.and(qdevice.ramInfo.contains(devicePartContainer.getRamInfo()));
 		}
 		// 볼륨정보 존재시like 질의
-		if (!devicePartContainer.getVolume_info().isEmpty()) {
-			builder.and(qdevice.volumeInfo.contains(devicePartContainer.getVolume_info()));
+		if (!devicePartContainer.getVolumeInfo().isEmpty()) {
+			builder.and(qdevice.volumeInfo.contains(devicePartContainer.getVolumeInfo()));
 		}
 		// 장비정보 존재시like 질의
-		if (!devicePartContainer.getDevice_info().isEmpty()) {
-			builder.and(qdevice.deviceInfo.contains(devicePartContainer.getDevice_info()));
+		if (!devicePartContainer.getDeviceInfo().isEmpty()) {
+			builder.and(qdevice.deviceInfo.contains(devicePartContainer.getDeviceInfo()));
 		}
 		devicePartList.addAll(queryFactory.selectFrom(qdevice).where(builder).fetch());
 
@@ -65,27 +65,29 @@ public class DeviceRepositoryImpl extends QuerydslRepositorySupport {
 	 * @param devicePartContainer
 	 * @param devicePartList
 	 */
-	public void findByDeviceId(DevicePartContainer devicePartContainer) {
+	public Object findByDeviceId(DevicePartContainer devicePartContainer) {
 
 		QDevice qdevice = QDevice.device;
 		JPAQueryFactory queryFactory = new JPAQueryFactory(getEntityManager());
 		BooleanBuilder builder = new BooleanBuilder();
-		builder.and(qdevice.deviceId.eq(devicePartContainer.getDevice_id()));
+		builder.and(qdevice.deviceId.eq(devicePartContainer.getDeviceId()));
 		
 		// 부품 클릭시 상세정보 호출
-		if (devicePartContainer.getDevice_id() > 0) {
+		if (devicePartContainer.getDeviceId() > 0) {
 			Device device = queryFactory.selectFrom(qdevice).where(builder).fetchOne();
 			if (device != null) {
-				devicePartContainer.setDevice_id(device.getDeviceId());
-				devicePartContainer.setDevice_model(device.getDeviceModel());
-				devicePartContainer.setDevice_info(device.getDeviceInfo());
-				devicePartContainer.setDevice_serial_number(device.getDeviceSerialNumber());
-				devicePartContainer.setDevice_category(device.getDeviceCategory());
-				devicePartContainer.setCpu_info(device.getCpuInfo());
-				devicePartContainer.setRam_info(device.getRamInfo());
-				devicePartContainer.setVolume_info(device.getVolumeInfo());
+				devicePartContainer.setDeviceId(device.getDeviceId());
+				devicePartContainer.setDeviceModel(device.getDeviceModel());
+				devicePartContainer.setDeviceInfo(device.getDeviceInfo());
+				devicePartContainer.setDeviceSerialNumber(device.getDeviceSerialNumber());
+				devicePartContainer.setDeviceCategory(device.getDeviceCategory());
+				devicePartContainer.setCpuInfo(device.getCpuInfo());
+				devicePartContainer.setRamInfo(device.getRamInfo());
+				devicePartContainer.setVolumeInfo(device.getVolumeInfo());
 			}	
 		}
+		
+		return queryFactory.selectFrom(qdevice).where(builder).fetchOne();
 		// 장비 클릭시 물려있는 정보 호출
 		// TODO devicePart에 있는 key 정보를 바탕으로 호출해야함
 

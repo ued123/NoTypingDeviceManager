@@ -14,7 +14,7 @@ public class DevicePartQuery {
 	
 	String newQuery = SELECT_PART;
 	newQuery += CONDITION_PART_MODEL;
-	if (!devicePartContainer.getPart_manufactor().isEmpty()) {
+	if (!devicePartContainer.getPartManufactor().isEmpty()) {
 	    newQuery += CONDITION_PART_MANUFACTOR;
 	}
 	return newQuery;
