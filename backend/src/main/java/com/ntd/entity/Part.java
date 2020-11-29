@@ -1,56 +1,83 @@
 package com.ntd.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "part")
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Part {
 
-    @Id
-    @Column(name = "part_id")
-    private long partId;
+	@Id
+	@Column(name = "part_id")
+	private long partId;
 
-    @Column(name = "part_category")
-    private String partCategory;
+	@Column(name = "part_category")
+	private String partCategory;
 
-    @Column(name = "part_model")
-    private String partModel;
+	@Column(name = "part_model")
+	private String partModel;
 
-    @Column(name = "part_manufactor")
-    private String partManufactor;
+	@Column(name = "part_manufactor")
+	private String partManufactor;
 
-    public long getPartId() {
-        return partId;
-    }
+    @ManyToMany(mappedBy = "parts", fetch = FetchType.LAZY)
+    private Set<Device> devices = new HashSet<>();
 
-    public void setPartId(long partId) {
-        this.partId = partId;
-    }
+	public long getPartId() {
+		return partId;
+	}
 
-    public String getPartCategory() {
-        return partCategory;
-    }
+	public void setPartId(long partId) {
+		this.partId = partId;
+	}
 
-    public void setPartCategory(String partCategory) {
-        this.partCategory = partCategory;
-    }
+	public String getPartCategory() {
+		return partCategory;
+	}
 
-    public String getPartModel() {
-        return partModel;
-    }
+	public void setPartCategory(String partCategory) {
+		this.partCategory = partCategory;
+	}
 
-    public void setPartModel(String partModel) {
-        this.partModel = partModel;
-    }
+	public String getPartModel() {
+		return partModel;
+	}
 
-    public String getPartManufactor() {
-        return partManufactor;
-    }
+	public void setPartModel(String partModel) {
+		this.partModel = partModel;
+	}
 
-    public void setPartManufactor(String partManufactor) {
-        this.partManufactor = partManufactor;
-    }
+	public String getPartManufactor() {
+		return partManufactor;
+	}
+
+	public void setPartManufactor(String partManufactor) {
+		this.partManufactor = partManufactor;
+	}
+	/*
+	public Set<UserDevPartRelation> getDevicePartList() {
+		return devicePartList;
+	}
+
+	public void setDevicePartList(Set<UserDevPartRelation> devicePartList) {
+		this.devicePartList = devicePartList;
+	}
+	*/
 }

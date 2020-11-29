@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ntd.common.constant.Characters;
 import com.ntd.devicePart.params.DevicePartContainer;
 
 /**
@@ -38,17 +39,19 @@ public class DevicePartManager {
     }
     
     /**
-     * 장비/부품 리스트중 선택하여 상세 정보 제공
+     * device Id를 통해서 부품정보 호출
      * @param resultMap
      * @param devicePartContainer
      */
-    public void getDevicePart (Map<String, Object> resultMap, DevicePartContainer devicePartContainer) {
-		
-		Object result = partRepo.findByPartId(devicePartContainer);
-		if (result == null) {
-			result = deviceRepo.findByDeviceId(devicePartContainer);
-		}
-		//  part 리스트 가져오기
-		resultMap.put("devicePartContainer", result);
+    public void findDevicePartsById (Map<String, Object> resultMap, DevicePartContainer devicePartContainer) {
+    	//  part 리스트 가져오기
+    	if (devicePartContainer.getDeviceId() > 0) {
+    		devicePartContainer.setPartModel(Characters.BLANK);
+    		deviceRepo.findDevicePartsById(devicePartContainer);
+    	} else if (devicePartContainer.getPartId() > 0) {
+    		devicePartContainer.setDeviceModel(Characters.BLANK);
+    		partRepo.findByPartId(devicePartContainer);
+    	}
+    	resultMap.put("devicePartContainer", devicePartContainer);
     }
 }

@@ -79,7 +79,7 @@ class Device extends Component {
     return (
         <div className="row height-100">
           {/* Header */}
-          <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 pb-2">
+          <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 pb-2 headerWrapper">
             <Header />
           </div>
           {/* 검색, 리스트 창 영억
@@ -101,10 +101,14 @@ class Device extends Component {
               col-md viewport width 1000
               col-lg viewport width 1500
             */}
+          {/*
+          <div className="col-xs-8 col-sm-8 col-md-8 col-lg-8 device-bg-1 deviceDetailWrapper">
+          <div className="col-xs-auto col-sm-auto col-md-auto col-lg-auto device-bg-1 deviceDetailWrapper">
+          */}
           <div className="col-xs-8 col-sm-8 col-md-8 col-lg-8 device-bg-1 deviceDetailWrapper">
             <div className="row ml-3 h-100">
-              <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 h-25 p-4 text-Center">
-                <h5><span className="badge badge-primary w-50 detail-title p-4">컴퓨터 관리</span></h5>
+              <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 h-20 p-3 text-Center">
+                <h5><span className="badge badge-primary w-50 detail-title p-3">컴퓨터 관리</span></h5>
               </div>
               <ul className="list-group w-100">
                 <DeviceDetailComp isSearchOne = {isSearchOne} doSearchInitialize = {this.doSearchInitialize} devicePartContainer={devicePartContainer} history = {history}/>
@@ -113,7 +117,6 @@ class Device extends Component {
             </div>
           </div>
         </div>
-
     );
   }
 }

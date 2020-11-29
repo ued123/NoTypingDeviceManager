@@ -46,26 +46,16 @@ public class PartRepositoryImpl extends QuerydslRepositorySupport {
 	 * @param devicePartContainer
 	 * @param devicePartList
 	 */
-	public Object findByPartId(DevicePartContainer devicePartContainer) {
+	public void findByPartId(DevicePartContainer devicePartContainer) {
 
 		QPart qpart = QPart.part;
 		JPAQueryFactory queryFactory = new JPAQueryFactory(getEntityManager());
 		BooleanBuilder builder = new BooleanBuilder();
 		builder.and(qpart.partId.eq(devicePartContainer.getPartId()));
-		
 		// 부품 클릭시 상세정보 호출
 		if (devicePartContainer.getPartId() > 0) {
-			Part part = queryFactory.selectFrom(qpart).where(builder).fetchOne();
-			if (part != null) {
-				devicePartContainer.setPartId(part.getPartId());
-				devicePartContainer.setPartModel(part.getPartModel());
-				devicePartContainer.setPartCategory(part.getPartCategory());
-				devicePartContainer.setPartManufactor(part.getPartManufactor());
-			}	
+			devicePartContainer.addPart(queryFactory.selectFrom(qpart).where(builder).fetchOne());
 		}
-		// 장비 클릭시 물려있는 정보 호출
-		// TODO devicePart에 있는 key 정보를 바탕으로 호출해야함
-		return queryFactory.selectFrom(qpart).where(builder).fetchOne();
 	}
 
 }

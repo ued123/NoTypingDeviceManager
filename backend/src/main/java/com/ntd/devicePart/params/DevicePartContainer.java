@@ -1,9 +1,10 @@
 package com.ntd.devicePart.params;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.ntd.common.constant.Characters;
+import com.ntd.entity.Device;
 import com.ntd.entity.Part;
 
 /**
@@ -40,7 +41,7 @@ public class DevicePartContainer {
 
 	private boolean doSearchDefault = false;
 
-	private List<Part> partList = new ArrayList<>();
+	private Set<Part> parts = new HashSet<>();
 
 	public long getPartId() {
 		return partId;
@@ -145,17 +146,42 @@ public class DevicePartContainer {
 	public void setDoSearchDefault(boolean doSearchDefault) {
 		this.doSearchDefault = doSearchDefault;
 	}
-	
-	public List<Part> getPartList() {
-		return partList;
+
+	public Set<Part> getParts() {
+		return parts;
 	}
 
-	public void setPartList(List<Part> partList) {
-		this.partList = partList;
+	public void setParts(Set<Part> parts) {
+		this.parts = parts;
 	}
 
-	public void addPartList(List<Part> partList) {
-		this.partList.addAll(partList);
+	public void addPart(Part part) {
+		this.parts.add(part);
+	}
+
+	public void setDevice(Device device) {
+		if (device == null) {
+			return;
+		}
+		this.deviceId = device.getDeviceId();
+		this.deviceModel = device.getDeviceModel();
+		this.deviceInfo = device.getDeviceInfo();
+		this.deviceSerialNumber = device.getDeviceSerialNumber();
+		this.deviceCategory = device.getDeviceCategory();
+		this.cpuInfo = device.getCpuInfo();
+		this.ramInfo = device.getRamInfo();
+		this.volumeInfo = device.getVolumeInfo();
+		this.parts = device.getParts();
+	}
+
+	public void setPart(Part part) {
+		if (part == null) {
+			return;
+		}
+		this.partId = part.getPartId();
+		this.partModel = part.getPartModel();
+		this.partCategory = part.getPartCategory();
+		this.partManufactor = part.getPartManufactor();
 	}
 
 	public boolean paramsEmptyByPart() {

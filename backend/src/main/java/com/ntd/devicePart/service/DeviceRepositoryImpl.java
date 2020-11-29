@@ -65,7 +65,7 @@ public class DeviceRepositoryImpl extends QuerydslRepositorySupport {
 	 * @param devicePartContainer
 	 * @param devicePartList
 	 */
-	public Object findByDeviceId(DevicePartContainer devicePartContainer) {
+	public void findByDeviceId(DevicePartContainer devicePartContainer, DevicePartContainer devicePartResult) {
 
 		QDevice qdevice = QDevice.device;
 		JPAQueryFactory queryFactory = new JPAQueryFactory(getEntityManager());
@@ -76,21 +76,20 @@ public class DeviceRepositoryImpl extends QuerydslRepositorySupport {
 		if (devicePartContainer.getDeviceId() > 0) {
 			Device device = queryFactory.selectFrom(qdevice).where(builder).fetchOne();
 			if (device != null) {
-				devicePartContainer.setDeviceId(device.getDeviceId());
-				devicePartContainer.setDeviceModel(device.getDeviceModel());
-				devicePartContainer.setDeviceInfo(device.getDeviceInfo());
-				devicePartContainer.setDeviceSerialNumber(device.getDeviceSerialNumber());
-				devicePartContainer.setDeviceCategory(device.getDeviceCategory());
-				devicePartContainer.setCpuInfo(device.getCpuInfo());
-				devicePartContainer.setRamInfo(device.getRamInfo());
-				devicePartContainer.setVolumeInfo(device.getVolumeInfo());
+				devicePartResult.setDevice(device);
 			}	
 		}
-		
-		return queryFactory.selectFrom(qdevice).where(builder).fetchOne();
-		// 장비 클릭시 물려있는 정보 호출
-		// TODO devicePart에 있는 key 정보를 바탕으로 호출해야함
-
 	}
-
+	
+	public void findDevicePartsById (DevicePartContainer devicePartContainer) {
+		QDevice qdevice = QDevice.device;
+		// device , part 같이 join하여질의
+		Device device = from(qdevice).innerJoin(qdevice.parts).where(qdevice.deviceId.eq(devicePartContainer.getDeviceId())).fetchJoin().fetchOne();
+		if (device != null) {
+			devicePartContainer.setDevice(device);	
+			return;
+		}
+		// 없을때, device만 질의
+		devicePartContainer.setDevice(from(qdevice).where(qdevice.deviceId.eq(devicePartContainer.getDeviceId())).fetchOne());
+	}
 }

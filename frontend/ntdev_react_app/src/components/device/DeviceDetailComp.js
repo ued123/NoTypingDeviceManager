@@ -2,6 +2,9 @@ import React, { Component} from 'react';
 import axios from 'axios';
 import { requestProxy} from '../common/Auth';
 import labtop from '../../img/labtop.png';
+import { Card, Button, ListGroup, Nav} from 'react-bootstrap';
+import { faPlus} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import  './Device.css';
 
 
@@ -28,23 +31,12 @@ class DeviceDetailComp extends Component {
             volumeInfo : "",
             deviceInfo : "",
             primaryName : "",
-            /*
-            device_id : 1,
-            device_category : "cateTESET",
-            device_model : "modelTest",
-            device_serial_number : "serialTEST",
-            cpu_info : "CPUTEST",
-            ram_info : "RAMTEST",
-            volume_info : "VOLUMETEST",
-            device_info : "DEIVCEINFOTEST",
-            primaryName : "ss",
-            */
             partId : 0,
             partCategory : "",
             partModel : "",
             partManufactor : "",
             // 장비에 매핑되는 parts들
-            partList : []
+            parts : []
           },
           isChange : false,
           history : this.props.history,
@@ -80,6 +72,16 @@ class DeviceDetailComp extends Component {
     if (devicePartContainer === null) {
       return;
     }
+    // 초기화
+    let eles = document.getElementsByClassName("partInfo");
+    for (let i = 0; i < eles.length; i++) {
+        eles[i].innerText = "";
+    }
+    eles = document.getElementsByClassName("deviceInfo");
+    for (let i = 0; i < eles.length; i++) {
+        eles[i].innerText = "";
+    }
+
     const urlInfo = '/devicePart/getDevicePart';
     const headerInfo = {
       'Content-Type': 'application/json',
@@ -88,139 +90,89 @@ class DeviceDetailComp extends Component {
     const data = await requestProxy(urlInfo, headerInfo, devicePartContainer, this.state).then(function(res) {
         return res;
     });
+    if (data.devicePartContainer === undefined || data.devicePartContainer === null) {
+      return;
+    }
     this.setState ({'devicePartContainer' : data.devicePartContainer});
   };
 
+  doPartInfo = (e) => {
+    const index = e.currentTarget.attributes.index.value;
+    let listGroupItems = document.getElementsByClassName("partInfo");
+    const parts = this.state.devicePartContainer.parts;
+    listGroupItems[0].innerText = parts[index].partModel;
+    listGroupItems[1].innerText = parts[index].partManufactor;
+    listGroupItems[2].innerText = parts[index].partCategory;
+
+  };
   render() {
     const {devicePartContainer} = this.state;
-
+    const parts = devicePartContainer.parts;
     return (
       <div>
-      {/* 관리번호 사용자  용도row*/}
-        <li className="list-group-item device-bg-1 border-none">
         <div className="row">
-          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-Center ">
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text" id="basic-addon1">
-                  관리 번호
-                </span>
-              </div>
-              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)" value= {devicePartContainer.device_id}/>
-            </div>
+          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <Card style={{ width: '18rem' }}>
+              <Card.Header className="text-center">관리정보</Card.Header>
+              <ListGroup variant="flush">
+                <ListGroup.Item>관리번호: TODO 구현</ListGroup.Item>
+                <ListGroup.Item>사용자: TODO 구현</ListGroup.Item>
+                <ListGroup.Item>용도: TODO 구현</ListGroup.Item>
+              </ListGroup>
+            </Card>
           </div>
-          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-Center ">
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text" id="basic-addon1">
-                  사용자
-                </span>
-              </div>
-              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)"  value="TODO 구현"/>
-            </div>
+          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <Card style={{ width: '18rem' }}>
+              <Card.Header className="text-center">장비정보</Card.Header>
+              <ListGroup variant="flush">
+                <ListGroup.Item>장비명: <span className="deviceInfo">{devicePartContainer.deviceModel}</span></ListGroup.Item>
+                <ListGroup.Item>시리얼넘버: <span className="deviceInfo">{devicePartContainer.deviceSerialNumber}</span></ListGroup.Item>
+                <ListGroup.Item>CPU: <span className="deviceInfo">{devicePartContainer.cpuInfo}</span></ListGroup.Item>
+                <ListGroup.Item>RAM: <span className="deviceInfo">{devicePartContainer.ramInfo}</span></ListGroup.Item>
+                <ListGroup.Item>VOLUME: <span className="deviceInfo">{devicePartContainer.volumeInfo}</span></ListGroup.Item>
+              </ListGroup>
+            </Card>
           </div>
-          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-Center ">
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text" id="basic-addon1">
-                  용도
-                </span>
-              </div>
-              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)" value ="TODO 구현"/>
-            </div>
+          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <Card style={{ width: '18rem' }}>
+              <Card.Header className="text-center">
+                <Nav variant="tabs">
+                { parts !== undefined && parts.length > 0
+                  && parts.map ((part,index) => {
+                    const number = index +1;
+                    return (<Nav.Item>
+                              <Nav.Link index={index} onClick={this.doPartInfo}>부품{index + 1}</Nav.Link>
+                            </Nav.Item>);
+                  })}
+                  <Nav.Item>
+                    <Nav.Link>
+                        <FontAwesomeIcon icon={faPlus} />
+                    </Nav.Link>
+                  </Nav.Item>
+                </Nav>
+              </Card.Header>
+              <ListGroup variant="flush">
+                <ListGroup.Item>부품명:<span className="partInfo"></span></ListGroup.Item>
+                <ListGroup.Item>제조사:<span className="partInfo"></span></ListGroup.Item>
+                <ListGroup.Item>분류:<span className="partInfo"></span></ListGroup.Item>
+              </ListGroup>
+            </Card>
           </div>
-        </div>
-        </li>
-        {/* 모델명, 시리얼 넘버 row*/}
-        <li className="list-group-item device-bg-1 border-none">
-        <div className="row">
-          <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-Center ">
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text" id="basic-addon1">
-                  모델명
-                </span>
-              </div>
-              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)"  value= {devicePartContainer.deviceModel}/>
-            </div>
-          </div>
-          <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-Center ">
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text" id="basic-addon1">
-                  시리얼넘버
-                </span>
-              </div>
-              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)" value= {devicePartContainer.deviceSerialNumber}/>
-            </div>
-          </div>
-        </div>
-        </li>
-        {/*
-          cpu_info VARCHAR(20) default '',
-          ram_info VARCHAR(20) default '',
-          volume_info VARCHAR(20) default '',
-          device_info VARCHAR(20) default '',
-          CPU, RAM, VOLUME, DEVICE_INFO
-
-          */}
-        <li className="list-group-item device-bg-1 border-none">
-        <div className="row">
-          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-Center ">
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text" id="basic-addon1">
-                  CPU
-                </span>
+          <div class="w-100"></div>
+          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <Card style={{ width: '18rem' }}>
+              <Card.Header className="text-center">장비이력</Card.Header>
+              <Card.Body>
+                <div className="form-group">
+                  <Card.Text>
+                    <textarea className="form-control" rows="5" id="comment" name="text" style={{ fontSize: '8px' }}></textarea>
+                  </Card.Text>
                 </div>
-              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)" value= {devicePartContainer.cpuInfo}/>
-            </div>
-          </div>
-          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-Center ">
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text" id="basic-addon1">
-                  RAM
-                </span>
-              </div>
-              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)"  value= {devicePartContainer.ramInfo}/>
-            </div>
-          </div>
-          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-Center ">
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text" id="basic-addon1">
-                  VOLUME
-                </span>
-              </div>
-              <input type="text" className="form-control search-text" aria-label="Amount (to the nearest dollar)"  value= {devicePartContainer.volumeInfo}/>
-            </div>
+              </Card.Body>
+            </Card>
           </div>
         </div>
-        </li>
-        {/* TODO PART제품 정보도 포함하기 row*/}
-        <li className="list-group-item device-bg-1 border-none">
-          <div className="row">
-            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-Center ">
-              <div className="form-group">
-                <label>TODO: 파트정보</label>
-
-              </div>
-            </div>
-          </div>
-        </li>
-        {/* 고객사 이력사항 row*/}
-        <li className="list-group-item device-bg-1 border-none">
-          <div className="row">
-            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-Center ">
-              <div className="form-group">
-                <label>장비 이력</label>
-                <textarea className="form-control" rows="5" id="comment" name="text"></textarea>
-              </div>
-            </div>
-          </div>
-        </li>
-        </div>
+      </div>
     );
   }
 }

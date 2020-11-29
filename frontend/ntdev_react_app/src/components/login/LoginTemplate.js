@@ -76,7 +76,7 @@ class LoginTemplate extends Component {
       <div className="container d-flex justify-content-center h-100">
       <link rel="stylesheet" type="text/css" href='LoginTemplate.css' />
         {/* 로그인 Frame*/}
-        <div className="card">
+        <div className="card loginCard">
           <div className="card-header">
             <h3>장비 관리 서비스</h3>
             <div className="d-flex justify-content-end social_icon">

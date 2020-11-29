@@ -22,7 +22,6 @@ ram_info VARCHAR(100) default '',
 volume_info VARCHAR(100) default '',
 device_info VARCHAR(100) default '',
 PRIMARY KEY (device_id)
-
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE user_device_part_relationship (
@@ -31,7 +30,6 @@ device_id INT(3) unsigned NOT NULL,
 part_id INT(3) unsigned NOT NULL,
 PRIMARY KEY (rel_id)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
-
 
 ALTER TABLE user_device_part_relationship
 ADD FOREIGN KEY (device_id) REFERENCES device(device_id);
@@ -76,3 +74,51 @@ VALUE (2,'H','Western Digital WD RED 5400/64M \(WD40EFRX, 4TB\)','Western Digita
 
 INSERT INTO part(part_id, part_category, part_model, part_manufactor)
 VALUE (3,'S','Western Digital WD BLUE SN550 M.2 NVMe \(500GB\)','Western Digital');
+
+
+-- 2020 11 -22
+
+-- 유저 이력 테이블 추가
+
+CREATE TABLE user_history (
+history_id INT(3) unsigned NOT NULL AUTO_INCREMENT,
+user_date VARCHAR(255) default '',
+user_history_type VARCHAR(20) default '',
+user_history VARCHAR(255) default '',
+PRIMARY KEY (history_id)
+);
+
+-- 유저 이력, 장비 관계 테이블 추가
+CREATE TABLE history_device_relationship (
+rel_id INT(3) unsigned NOT NULL AUTO_INCREMENT,
+device_id INT(3) unsigned NOT NULL,
+history_id INT(3) unsigned NOT NULL,
+PRIMARY KEY (rel_id)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE history_device_relationship ADD FOREIGN KEY (device_id) REFERENCES device(device_id);
+ALTER TABLE history_device_relationship ADD FOREIGN KEY (history_id) REFERENCES user_history(history_id);
+
+
+-- 유저 이력, 부품 관계 테이블 추가
+CREATE TABLE history_part_relationship (
+rel_id INT(3) unsigned NOT NULL AUTO_INCREMENT,
+part_id INT(3) unsigned NOT NULL,
+history_id INT(3) unsigned NOT NULL,
+PRIMARY KEY (rel_id)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE history_part_relationship ADD FOREIGN KEY (part_id) REFERENCES part(part_id);
+ALTER TABLE history_part_relationship ADD FOREIGN KEY (history_id) REFERENCES user_history(history_id);
+
+
+
+-- test case
+
+insert into user_history(`history_id`, `user_date`, `user_history_type`, `user_history`) values (null, '1606024323000', 'DEV', '이승헌 개발 노트북 지급');
+insert into history_device_relationship(`rel_id`, `device_id`, `history_id`) values (null, '1', '1');
+insert into user_device_part_relationship(`rel_id`, `device_id`, `part_id`) values (null, '1', '1');
+insert into user_device_part_relationship(`rel_id`, `device_id`, `part_id`) values (null, '1', '2');
+
+
+

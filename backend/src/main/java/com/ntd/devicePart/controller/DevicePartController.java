@@ -3,8 +3,6 @@ package com.ntd.devicePart.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.security.sasl.AuthenticationException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +64,7 @@ public class DevicePartController {
 				resultMap.put(Characters.RESPONSE, "403. Failrue Authentication. ");
 				return resultMap;
 			}
-			devicePartManager.getDevicePart(resultMap, devicePartContainer);
+			devicePartManager.findDevicePartsById(resultMap, devicePartContainer);
 		} catch (Exception e) {
 			logger.warn("Error Process Getting Device, Part DataInfo : {}", e.getMessage(), e);
 			resultMap.put(Characters.RESPONSE, "500. Error internal Server");
