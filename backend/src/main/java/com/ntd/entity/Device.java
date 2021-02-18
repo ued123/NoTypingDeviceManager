@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "device")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-public class Device {
+public class Device implements DevicePartEntityBinder{
 
 	@Id
 	@Column(name = "device_id")
@@ -116,6 +116,11 @@ public class Device {
 
 	public void setParts(Set<Part> parts) {
 		this.parts = parts;
+	}
+
+	@Override
+	public String obtainDeviceOrPartModel() {
+		return this.deviceModel;
 	}
 
 }

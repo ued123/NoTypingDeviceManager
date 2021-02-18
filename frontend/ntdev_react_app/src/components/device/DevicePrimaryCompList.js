@@ -27,7 +27,7 @@ class DevicePrimaryCompList extends Component {
       if (devicePartContainer === null) {
         return;
       }
-      const urlInfo = '/devicePart/getList';
+      const urlInfo = '/devicePart/getDevicPartList';
       const headerInfo = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')

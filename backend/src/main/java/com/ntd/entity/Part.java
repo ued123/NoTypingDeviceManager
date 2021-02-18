@@ -3,15 +3,11 @@ package com.ntd.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -22,7 +18,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "part")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-public class Part {
+public class Part  implements DevicePartEntityBinder{
 
 	@Id
 	@Column(name = "part_id")
@@ -71,13 +67,10 @@ public class Part {
 	public void setPartManufactor(String partManufactor) {
 		this.partManufactor = partManufactor;
 	}
-	/*
-	public Set<UserDevPartRelation> getDevicePartList() {
-		return devicePartList;
+
+	@Override
+	public String obtainDeviceOrPartModel() {
+		return this.partModel;
 	}
 
-	public void setDevicePartList(Set<UserDevPartRelation> devicePartList) {
-		this.devicePartList = devicePartList;
-	}
-	*/
 }

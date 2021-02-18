@@ -14,13 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ntd.common.constant.Characters;
+import com.ntd.common.exception.AuthenticationExceptionImpl;
+import com.ntd.devicePart.exception.DevicePartException;
 import com.ntd.devicePart.params.DevicePartContainer;
 import com.ntd.devicePart.service.DevicePartManager;
 
 /**
- * Device-Part FrontEnd-Backend 통신시 비지니스 로직
- * 
- * @author HoYa
+ * Front에서 장비 - 부품 UI 관련 URL 요청시
+ * 처리하는 클래스
+ * @author hoya
  *
  */
 @RestController
@@ -32,45 +34,40 @@ public class DevicePartController {
 	@Autowired
 	private DevicePartManager devicePartManager;
 
-	@PostMapping(path = "/getList", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Map<String, Object> getList(@RequestBody DevicePartContainer devicePartContainer, Authentication authentication) {
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put(Characters.RESULT, Characters.SUCCESS);
-		resultMap.put(Characters.RESPONSE, "200. Success OK.");
+	@PostMapping(path = "/devicePartList", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> processURLOfDevicePartList(@RequestBody DevicePartContainer devicePartContainer, Authentication authentication) {
+		Map<String, Object> requestResultContainer = new HashMap<>();
+		String responseMsg = "200. Success OK.";
 		try {
-			if (authentication == null) {
-				logger.info("Error Process Getting Device, Auth Fail. ");
-				resultMap.put(Characters.RESPONSE, "403. Failrue Authentication. ");
-				return resultMap;
-			}
-			devicePartManager.getList(resultMap, devicePartContainer);
-			logger.info("Get DevicePartList");
-		} catch (Exception e) {
-			logger.warn("Error Process Getting Device, Part DataInfo : {}", e.getMessage(), e);
-			resultMap.put(Characters.RESULT, Characters.FAIL);
-			resultMap.put(Characters.RESPONSE, "500. Error internal Server");
+			AuthenticationExceptionImpl.checkAuthentication(authentication);
+			requestResultContainer.put("devicePartList", devicePartManager.getDevicesOrPartsByColumns(devicePartContainer));
+			
+		} catch (AuthenticationExceptionImpl | DevicePartException e) {
+			logger.warn("ERROR > processURLOfDevicePartList > Exception > {}", e.getMessage(), e);
+			responseMsg = e.getMessage();
+		} finally {
+			requestResultContainer.put(Characters.RESPONSE, responseMsg);
 		}
-		return resultMap;
+		
+		return requestResultContainer;
 	}
 
 	@PostMapping(path = "/getDevicePart", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Map<String, Object> getDevicePart(@RequestBody DevicePartContainer devicePartContainer, Authentication authentication) {
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put(Characters.RESULT, Characters.SUCCESS);
-		resultMap.put(Characters.RESPONSE, "200. Success OK.");
+	public Map<String, Object> processURLOfDevicePart(@RequestBody DevicePartContainer devicePartContainer, Authentication authentication) {
+		Map<String, Object> requestResultContainer = new HashMap<>();
+		String responseMsg = "200. Success OK.";
 		try {
-			if (authentication == null) {
-				logger.info("Error Process Getting Device, Auth Fail. ");
-				resultMap.put(Characters.RESPONSE, "403. Failrue Authentication. ");
-				return resultMap;
-			}
-			devicePartManager.findDevicePartsById(resultMap, devicePartContainer);
-		} catch (Exception e) {
-			logger.warn("Error Process Getting Device, Part DataInfo : {}", e.getMessage(), e);
-			resultMap.put(Characters.RESPONSE, "500. Error internal Server");
-			resultMap.put(Characters.RESULT, Characters.FAIL);
+			AuthenticationExceptionImpl.checkAuthentication(authentication);
+			devicePartManager.setDeviceOrPartsByIdInDevicePartContainer(devicePartContainer);
+			requestResultContainer.put("devicePartContainer", devicePartContainer);
+		} catch (AuthenticationExceptionImpl | DevicePartException e) {
+			logger.warn("ERROR > requestResultContainer > Exception > {}", e.getMessage(), e);
+			responseMsg = e.getMessage();
+		} finally {
+			requestResultContainer.put(Characters.RESPONSE, responseMsg);
 		}
-		return resultMap;
+		
+		return requestResultContainer;
 	}
 
 }

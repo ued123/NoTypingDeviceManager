@@ -56,7 +56,7 @@ class Device extends Component {
       devicePartContainer['partId'] = devicePart.partId;
       // lifeCycle 발생
       this.setState({
-        'isSearchOne' : false
+        'isSearchOne' : true
       });
 
   };
@@ -66,7 +66,7 @@ class Device extends Component {
       // this.setState 함수를 사용시, state 값이 변하면 component 렌더링을 수행한다.
       // thist.state.xx 를 통해 값을 변경할 경우는 렌더링을 수행하지 않는다.
       this.setState({
-                      isSearchOne : true,
+                      isSearchOne : false,
                       isSearchList : false,
                       devicePrimaryCompListIsMount : true
                     });

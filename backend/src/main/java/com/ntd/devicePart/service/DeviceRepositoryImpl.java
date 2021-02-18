@@ -21,12 +21,19 @@ public class DeviceRepositoryImpl extends QuerydslRepositorySupport {
 	public DeviceRepositoryImpl() {
 		super(Device.class);
 	}
-
-	public void findAllLike(DevicePartContainer devicePartContainer, List<Object> devicePartList) {
-
+	
+	/**
+	 * 테이블: device, 컬럼: deviceModel, deviceSerialNumber, cpuInfo, ramInfo, volumeInfo, deviceInfo
+	 * 장비 모델(deviceModel), 장비 고유번호(deviceSerialNumber), 장비 cpu 정보(cpuInfo), 장비 램 정보(ramInfo), 장비 볼륨 정보(volumeInfo), 장비 정보(deviceInfo) 를 통해
+	 * 장비 리스트 정보를 얻는 함수
+	 * @param devicePartContainer
+	 * @return
+	 */
+	public List<Device> findDevicesByColumns(DevicePartContainer devicePartContainer) {
+		List<Device> devices = null;
 		if (!devicePartContainer.isDoSearchDefault() && devicePartContainer.paramsEmptyByDevice()) {
 			logger.debug("DEVICE > SEARCH > NOT SUPPORTED WHEN PARAMS EMPTY IN DEVICE");
-			return;
+			return devices;
 		}
 
 		QDevice qdevice = QDevice.device;
@@ -55,41 +62,26 @@ public class DeviceRepositoryImpl extends QuerydslRepositorySupport {
 		if (!devicePartContainer.getDeviceInfo().isEmpty()) {
 			builder.and(qdevice.deviceInfo.contains(devicePartContainer.getDeviceInfo()));
 		}
-		devicePartList.addAll(queryFactory.selectFrom(qdevice).where(builder).fetch());
-
+		devices = queryFactory.selectFrom(qdevice).where(builder).fetch();
+		return devices;
 	}
-
 
 	/**
-	 * device_id를 통해 데이터 검색
+	 *  테이블: device, 컬럼: deviceId - join 테이블: part
+	 *  장비고유식별번호(deviceId)를 통해 장비 정보, 장비와 연결된 부품 정보를 얻는 함수
 	 * @param devicePartContainer
-	 * @param devicePartList
 	 */
-	public void findByDeviceId(DevicePartContainer devicePartContainer, DevicePartContainer devicePartResult) {
+	public Device findDevicePartsById(DevicePartContainer devicePartContainer) {
 
-		QDevice qdevice = QDevice.device;
-		JPAQueryFactory queryFactory = new JPAQueryFactory(getEntityManager());
-		BooleanBuilder builder = new BooleanBuilder();
-		builder.and(qdevice.deviceId.eq(devicePartContainer.getDeviceId()));
-		
-		// 부품 클릭시 상세정보 호출
-		if (devicePartContainer.getDeviceId() > 0) {
-			Device device = queryFactory.selectFrom(qdevice).where(builder).fetchOne();
-			if (device != null) {
-				devicePartResult.setDevice(device);
-			}	
+		Device device = null;
+		// device 고유 식별번호가 없으면 데이터 질의하지 않음
+		if (devicePartContainer.getDeviceId() <= 0) {
+			return device;
 		}
-	}
-	
-	public void findDevicePartsById (DevicePartContainer devicePartContainer) {
 		QDevice qdevice = QDevice.device;
 		// device , part 같이 join하여질의
-		Device device = from(qdevice).innerJoin(qdevice.parts).where(qdevice.deviceId.eq(devicePartContainer.getDeviceId())).fetchJoin().fetchOne();
-		if (device != null) {
-			devicePartContainer.setDevice(device);	
-			return;
-		}
-		// 없을때, device만 질의
-		devicePartContainer.setDevice(from(qdevice).where(qdevice.deviceId.eq(devicePartContainer.getDeviceId())).fetchOne());
+		device = from(qdevice).leftJoin(qdevice.parts).where(qdevice.deviceId.eq(devicePartContainer.getDeviceId()))
+				.fetchJoin().fetchOne();
+		return device;
 	}
 }
