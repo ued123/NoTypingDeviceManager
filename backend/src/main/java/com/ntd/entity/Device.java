@@ -17,6 +17,7 @@ public class Device implements DevicePartEntityBinder{
 
 	@Id
 	@Column(name = "device_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long deviceId;
 
 	@Column(name = "device_category")

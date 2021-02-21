@@ -2,13 +2,18 @@ package com.ntd.devicePart.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ntd.devicePart.params.DevicePartContainer;
 import com.ntd.entity.Device;
+import com.ntd.entity.DevicePartEntityBinder;
 import com.ntd.entity.QDevice;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,6 +22,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 public class DeviceRepositoryImpl extends QuerydslRepositorySupport {
 
 	private final static Logger logger = LoggerFactory.getLogger(DeviceRepositoryImpl.class);
+
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	public DeviceRepositoryImpl() {
 		super(Device.class);
@@ -84,4 +92,22 @@ public class DeviceRepositoryImpl extends QuerydslRepositorySupport {
 				.fetchJoin().fetchOne();
 		return device;
 	}
+
+	/**
+	 * DB TABLE: device에 데이터 추가
+	 * @param devicePartContainer
+	 * @return
+	 */
+	@Transactional(readOnly = false)
+	public DevicePartEntityBinder addDevice(DevicePartContainer devicePartContainer) {
+		// frontEnd에서 받은 데이터를 entity로 전달
+		Device device = devicePartContainer.convertDevice();
+		// entity 데이터를 persist 수행시 영속성 컨텍스트에서 관리하며, 
+		// commit 후 entity는 DB와 동기화가 된다.
+		// 그리고 이 영속성들은 cache에서 관리하게 된다.
+		this.entityManager.persist(device);
+		this.entityManager.flush();
+		return device;
+	}
+
 }

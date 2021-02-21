@@ -184,6 +184,28 @@ public class DevicePartContainer {
 		this.partManufactor = part.getPartManufactor();
 	}
 
+	public Part convertPart() {
+		Part part = new Part();
+		part.setPartId(this.partId);
+		part.setPartModel(this.partModel);
+		part.setPartCategory(this.partCategory);
+		part.setPartManufactor(this.partManufactor);
+		return part;
+	}
+
+	public Device convertDevice() {
+		Device device = new Device();
+		device.setDeviceId(deviceId);
+		device.setDeviceModel(this.deviceModel);
+		device.setDeviceCategory(this.deviceCategory);
+		device.setDeviceSerialNumber(this.deviceSerialNumber);
+		device.setCpuInfo(this.cpuInfo);
+		device.setRamInfo(this.ramInfo);
+		device.setVolumeInfo(this.volumeInfo);
+		device.setDeviceInfo(this.deviceInfo);
+		return device;
+	}
+
 	public boolean paramsEmptyByPart() {
 
 		return (partCategory.length() + partManufactor.length() + partModel.length()) == 0;

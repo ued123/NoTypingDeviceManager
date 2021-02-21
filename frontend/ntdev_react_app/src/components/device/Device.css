@@ -4,6 +4,7 @@
 .search-text {
 	height: 38px;
 }
+
 .device-bg-1 {
 	background-color: #e9ecef !important;
 }
@@ -50,6 +51,10 @@
 	border: none !important;
 }
 
+.outline-none {
+	outline: none !important;
+}
+
 .search-label-font {
 	font-size: 8px !important;
 	font-weight: bolder !important;
@@ -62,4 +67,13 @@
 	z-index:1;
 	border: 1px solid #bec8d8;
 	background: white;
+}
+
+.devicePart-text-overflow-hidden {
+	width: 250px !important;
+	overflow:hidden !important;
+	text-overflow:ellipsis !important;
+	word-wrap: normal !important;
+  white-space: normal;
+	padding-right: 5px !important;
 }

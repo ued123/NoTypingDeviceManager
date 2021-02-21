@@ -34,7 +34,7 @@ public class DevicePartController {
 	@Autowired
 	private DevicePartManager devicePartManager;
 
-	@PostMapping(path = "/devicePartList", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/getDevicPartList", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> processURLOfDevicePartList(@RequestBody DevicePartContainer devicePartContainer, Authentication authentication) {
 		Map<String, Object> requestResultContainer = new HashMap<>();
 		String responseMsg = "200. Success OK.";
@@ -67,6 +67,48 @@ public class DevicePartController {
 			requestResultContainer.put(Characters.RESPONSE, responseMsg);
 		}
 		
+		return requestResultContainer;
+	}
+
+	@PostMapping(path = "/addPart", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> processURLOfAddPart(@RequestBody DevicePartContainer devicePartContainer, Authentication authentication) {
+		Map<String, Object> requestResultContainer = new HashMap<>();
+		// 정상 추가 되엇는지 시그널만 확인
+		String responseMsg = "200. Success OK.";
+		try {
+			// 고려사항
+			// addPart Url 에서는 부품만 추가 / 장비에 붙은 부품추가를 고려해야한다.
+			AuthenticationExceptionImpl.checkAuthentication(authentication);
+			devicePartManager.addPartAfterSetDevicePartContainer(devicePartContainer);
+			requestResultContainer.put("part", devicePartContainer);
+		} catch (AuthenticationExceptionImpl | DevicePartException e) {
+			logger.warn("ERROR > requestResultContainer > Exception > {}", e.getMessage(), e);
+			responseMsg = e.getMessage();
+		} finally {
+			requestResultContainer.put(Characters.RESPONSE, responseMsg);
+		}
+
+		return requestResultContainer;
+	}
+
+	@PostMapping(path = "/addDevice", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> processURLOfAddDevice(@RequestBody DevicePartContainer devicePartContainer, Authentication authentication) {
+		Map<String, Object> requestResultContainer = new HashMap<>();
+		// 정상 추가 되엇는지 시그널만 확인
+		String responseMsg = "200. Success OK.";
+		try {
+			// 고려사항
+			// addPart Url 에서는 부품만 추가 / 장비에 붙은 부품추가를 고려해야한다.
+			AuthenticationExceptionImpl.checkAuthentication(authentication);
+			devicePartManager.addDeviceAfterSetDevicePartContainer(devicePartContainer);
+			requestResultContainer.put("device", devicePartContainer);
+		} catch (AuthenticationExceptionImpl | DevicePartException e) {
+			logger.warn("ERROR > requestResultContainer > Exception > {}", e.getMessage(), e);
+			responseMsg = e.getMessage();
+		} finally {
+			requestResultContainer.put(Characters.RESPONSE, responseMsg);
+		}
+
 		return requestResultContainer;
 	}
 

@@ -21,6 +21,8 @@ import com.ntd.entity.Part;
 @Service
 public class DevicePartManager {
 
+	@Autowired private UserDevicePartRelationshipRepositoryImpl userDevicePartRelationshipRepo;
+
     @Autowired private DeviceRepositoryImpl deviceRepo;
 
     @Autowired private PartRepositoryImpl partRepo;
@@ -30,19 +32,24 @@ public class DevicePartManager {
      * @param devicePartContainer
      * @return
      */
-	public List<DevicePartEntityBinder> getDevicesOrPartsByColumns(DevicePartContainer devicePartContainer) throws DevicePartException {
+	public List<DevicePartEntityBinder> getDevicesOrPartsByColumns(DevicePartContainer devicePartContainer)
+			throws DevicePartException {
 		List<DevicePartEntityBinder> devicePartList = new ArrayList<>();
-		List<Part> partList = null;
-		List<Device> deviceList = null;
-		// 장비 , 부품 리스트 담기
-		partList = partRepo.findPartsByColumns(devicePartContainer);
-		if (partList != null) {
-			devicePartList.addAll(partList);
+		try {
+			devicePartList = new ArrayList<>();
+			// 장비 , 부품 리스트 담기
+			List<Part> partList = partRepo.findPartsByColumns(devicePartContainer);
+			if (partList != null) {
+				devicePartList.addAll(partList);
+			}
+			List<Device> deviceList = deviceRepo.findDevicesByColumns(devicePartContainer);
+			if (deviceList != null) {
+				devicePartList.addAll(deviceList);
+			}
+		} catch (Exception e) {
+			throw new DevicePartException(e);
 		}
-		deviceList = deviceRepo.findDevicesByColumns(devicePartContainer);
-		if (deviceList != null) {
-			devicePartList.addAll(deviceList);
-		}
+
 		return devicePartList;
 	}
 
@@ -52,18 +59,61 @@ public class DevicePartManager {
 	 * @return
 	 */
     public void setDeviceOrPartsByIdInDevicePartContainer (DevicePartContainer devicePartContainer) throws DevicePartException {
-    	DevicePartEntityBinder devicePartEntityBinder = null;
-    	devicePartEntityBinder = deviceRepo.findDevicePartsById(devicePartContainer);
-    	if (devicePartEntityBinder != null) {
-			devicePartContainer.setDevice((Device) devicePartEntityBinder);
-    		return; 
-    	}
-    	devicePartEntityBinder = partRepo.findPartByPartId(devicePartContainer);
-    	if (devicePartEntityBinder != null) {
-    		devicePartContainer.addPart((Part) devicePartEntityBinder);
-    		devicePartContainer.setDeviceModel(Characters.BLANK);
-    		return; 
+    	try {
+        	DevicePartEntityBinder devicePartEntityBinder = deviceRepo.findDevicePartsById(devicePartContainer);
+        	if (devicePartEntityBinder != null) {
+    			devicePartContainer.setDevice((Device) devicePartEntityBinder);
+        		return; 
+        	}
+        	devicePartEntityBinder = partRepo.findPartByPartId(devicePartContainer);
+        	if (devicePartEntityBinder != null) {
+        		devicePartContainer.addPart((Part) devicePartEntityBinder);
+        		devicePartContainer.setDeviceModel(Characters.BLANK);
+        		return; 
+        	}
+    	} catch (Exception e) {
+    		throw new DevicePartException(e);
     	}
     	
     }
+
+	/**
+     * 부품 테이블에 추가 
+	 * @param devicePartContainer
+	 * @return
+	 */
+	public void addPartAfterSetDevicePartContainer(DevicePartContainer devicePartContainer) throws DevicePartException {
+		DevicePartEntityBinder addedPart = null;
+		try {
+			// 장비에 매핑되는 부품 추가
+			if (devicePartContainer.getDeviceId() > 0) {
+				addedPart = userDevicePartRelationshipRepo.addUserDevicePartRelationshipAndPart(devicePartContainer);
+			}
+			if (addedPart == null) {
+				// 일반 부품 정보 추가
+				addedPart = partRepo.addPart(devicePartContainer);
+			}
+		} catch (Exception e) {
+			throw new DevicePartException(e);
+		}
+		devicePartContainer.setPart((Part) addedPart);
+	}
+
+	/**
+     * 장비 테이블에 추가 
+	 * @param devicePartContainer
+	 * @return
+	 */
+	public void addDeviceAfterSetDevicePartContainer(DevicePartContainer devicePartContainer) throws DevicePartException {
+		DevicePartEntityBinder addedDevice = null;
+		try {
+			// 장비 정보 추가
+			addedDevice = deviceRepo.addDevice(devicePartContainer);
+		} catch (Exception e) {
+			throw new DevicePartException(e);
+		}
+		devicePartContainer.setDevice((Device) addedDevice);
+		
+	}
+
 }

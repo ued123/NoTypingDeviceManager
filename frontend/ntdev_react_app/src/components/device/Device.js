@@ -32,6 +32,7 @@ class Device extends Component {
             doSearchDefault : false
     },
     isSearchOne : true,
+    isRsetParts : true,
     showDetail : false,
     isSearchList : true,
     devicePrimaryCompListIsMount : false,
@@ -40,10 +41,10 @@ class Device extends Component {
 
   // 검색 질의 요청시, 컬럼 정의가 아래와 같이 되어있기떄문,.. 저형태로 씀
   doSearch = (devicePartContainer) => {
-
-      this.setState({ isSearchList : true,
-                     'devicePartContainer' : devicePartContainer
-                    });
+    this.setState({
+                    isSearchList : true,
+                   'devicePartContainer' : devicePartContainer
+                  });
   };
 
   // 장비 하나 선택 후 deviceJs로 전달
@@ -56,9 +57,19 @@ class Device extends Component {
       devicePartContainer['partId'] = devicePart.partId;
       // lifeCycle 발생
       this.setState({
-        'isSearchOne' : true
+        'isSearchOne' : true,
+        'isRsetParts' : true,
+
       });
 
+  };
+  // parts 하위 컴포넌트 변수 초기화
+  stopPartInitialize = () => {
+      // this.setState 함수를 사용시, state 값이 변하면 component 렌더링을 수행한다.
+      // thist.state.xx 를 통해 값을 변경할 경우는 렌더링을 수행하지 않는다.
+      this.setState({
+                      isRsetParts : false,
+                    });
   };
 
   // DevicePrimaryCompList 호출후 isSearch 초기화 로직
@@ -68,6 +79,7 @@ class Device extends Component {
       this.setState({
                       isSearchOne : false,
                       isSearchList : false,
+                      isRsetParts : true,
                       devicePrimaryCompListIsMount : true
                     });
   };
@@ -75,11 +87,11 @@ class Device extends Component {
   render() {
     const history = this.props.history;
     //장비,부품 질의에 필요한 변수, 상세검색 노출 , 검색 체크
-    const {devicePartContainer,showDetail,isSearchOne, isSearchList} = this.state;
+    const {devicePartContainer, showDetail, isSearchOne, isRsetParts, isSearchList} = this.state;
     return (
-        <div className="row height-100">
+        <div className="row height-100 nopadding">
           {/* Header */}
-          <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 pb-2 headerWrapper">
+          <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 pb-2 headerWrapper nopadding">
             <Header />
           </div>
           {/* 검색, 리스트 창 영억
@@ -88,7 +100,7 @@ class Device extends Component {
               col-md viewport width 1000
               col-lg viewport width 1500
             */}
-          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 height-100">
+          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 height-100 nopadding-left">
              {/*검색 영역 */}
             <DevicePrimarySearch doSearch = {this.doSearch}/>
             {/* 리스트결과 영역 */}
@@ -101,19 +113,14 @@ class Device extends Component {
               col-md viewport width 1000
               col-lg viewport width 1500
             */}
-          {/*
-          <div className="col-xs-8 col-sm-8 col-md-8 col-lg-8 device-bg-1 deviceDetailWrapper">
-          <div className="col-xs-auto col-sm-auto col-md-auto col-lg-auto device-bg-1 deviceDetailWrapper">
-          */}
-          <div className="col-xs-8 col-sm-8 col-md-8 col-lg-8 device-bg-1 deviceDetailWrapper">
-            <div className="row ml-3 h-100">
+          <div className="col-xs-8 col-sm-8 col-md-8 col-lg-8 device-bg-1 nopadding-right">
+            <div className="row ml-3 h-100 nopadding">
               <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 h-20 p-3 text-Center">
                 <h5><span className="badge badge-primary w-50 detail-title p-3">컴퓨터 관리</span></h5>
               </div>
               <ul className="list-group w-100">
-                <DeviceDetailComp isSearchOne = {isSearchOne} doSearchInitialize = {this.doSearchInitialize} devicePartContainer={devicePartContainer} history = {history}/>
+                <DeviceDetailComp isSearchOne = {isSearchOne} isRsetParts = {isRsetParts} doSearchInitialize = {this.doSearchInitialize} devicePartContainer={devicePartContainer} stopPartInitialize = {this.stopPartInitialize} history = {history}/>
               </ul>
-              <button type="button" className="btn btn-danger mx-auto pl-4 pr-4 mb-2">저장</button>
             </div>
           </div>
         </div>

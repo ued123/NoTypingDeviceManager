@@ -24,14 +24,20 @@ export async function requestProxy(urlInfo, headerInfo, dataInfo, state) {
     headers : headerInfo,
     data : dataInfo
   }).catch(function (error) {
-    alert ("검색중 오류가 발생하여 작업을 중단합니다.");
+    alert ("요청 실패로 인해 작업을 중단합니다.");
   });
-  // 인증 실패 , 응답코드르 받지 못하면 기본 로그인 페이지로 redirect
-  if (response === undefined || response.data.response.indexOf("403") > -1) {
+  // 요청 실패
+  if (response === undefined) {
+    state.history.push("/");
+    return false;
+  }
+  // 인증 실패
+  if (response.data.response.indexOf("403") > -1) {
     alert ("유효하지 않은 계정 정보이므로, 로그인 창으로 이동합니다.");
     state.history.push("/");
     return false;
   }
+
   return response.data;
 
 }

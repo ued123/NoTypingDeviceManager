@@ -3,10 +3,11 @@ import axios from 'axios';
 import { requestProxy} from '../common/Auth';
 import labtop from '../../img/labtop.png';
 import { Card, Button, ListGroup, Nav} from 'react-bootstrap';
-import { faPlus} from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPlus} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import  './Device.css';
-
+import DeviceDetailCompParts from './DeviceDetailCompParts';
+import DeviceDetailCompDevice from './DeviceDetailCompDevice';
 
 /*
 장비 검색시 기본 정보포함 UI 생성
@@ -41,9 +42,10 @@ class DeviceDetailComp extends Component {
           isChange : false,
           history : this.props.history,
   };
+
   // 첫 렌더링 마친후 일어나느 이벤트
   componentDidMount(){
-    const { devicePartList, isChange, isSearchOne} = this.state;
+    const { isChange, isSearchOne} = this.state;
     // 무한루프 방지, APP 실행시 첫 마운트에만 수행
     if (!isSearchOne) {
       return;
@@ -53,17 +55,37 @@ class DeviceDetailComp extends Component {
     }
     this.setState ({isChange : true});
   }
+
   //state,props 변경시 일어나는 이벤트
-  // 부모딴에서  비지니스 로직제어해야함
+  // 부모딴에서 비지니스 로직제어해야함
   // 컴포넌트 변경시 두번의 렌더링 업데이트 수행하므로 제어
-  componentDidUpdate(prevProps, prevState){
-    let { devicePartContainer,isSearchOne } = this.props;
-    const { isChange } = this.state;
-    if (!isSearchOne) {
+  componentDidUpdate(){
+    let { devicePartContainer, isSearchOne, isRsetParts, doSearchInitialize, stopPartInitialize } = this.props;
+    if (isSearchOne) {
+      this.getDevicePart(devicePartContainer);
+      doSearchInitialize ();
       return;
     }
-    this.getDevicePart(devicePartContainer);
-    this.props.doSearchInitialize ();
+    // 일단 장비도 초기화 시키고, 나중에 따로 컴포넌트로 만들자
+    // 부품 상세점보 컴포넌트 초기화
+    if (isRsetParts) {
+      this.setState ({
+        devicePartContainer : {
+          ...this.state.devicePartContainer,
+          deviceId : 0,
+          deviceCategory : "",
+          deviceModel : "",
+          deviceSerialNumber : "",
+          cpuInfo : "",
+          ramInfo : "",
+          volumeInfo : "",
+          deviceInfo : "",
+          'parts' : []
+          }
+        });
+      stopPartInitialize ();
+      return;
+    }
   }
 
   // 장비, 부품 리스트중 하나를 선택시 데이터를 얻는 로직
@@ -92,24 +114,108 @@ class DeviceDetailComp extends Component {
     }
     // 초기화
     this.setState ({'devicePartContainer' : data.devicePartContainer});
-  };
-
-  doPartInfo = (e) => {
-    const index = e.currentTarget.attributes.index.value;
-    let listGroupItems = document.getElementsByClassName("partInfo");
-    const parts = this.state.devicePartContainer.parts;
-    listGroupItems[0].innerText = parts[index].partModel;
-    listGroupItems[1].innerText = parts[index].partManufactor;
-    listGroupItems[2].innerText = parts[index].partCategory;
 
   };
+
+  // 장비에 매핑되는 부품 추가
+  addPartInDevice = async (part) => {
+    // DeviceDetailCompParts comp에서 받은 데이터를
+    // db 전달후 정상 처리시 아래 컴포넌트에 전달한다.
+    if (part === null) {
+      return;
+    }
+    part['deviceId'] = this.state.devicePartContainer.deviceId;
+    const urlInfo = '/devicePart/addPart';
+    const headerInfo = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    };
+
+    const data = await requestProxy(urlInfo, headerInfo, part, this.state).then(function(res) {
+        return res;
+    });
+
+    if (data.part === undefined || data.part === null) {
+      return;
+    }
+
+    // 초기화 this.state.arrayvar.concat([newelement])
+    this.setState ({
+      devicePartContainer : {
+        ...this.state.devicePartContainer,
+        parts : [...this.state.devicePartContainer.parts, data.part]
+      }
+    });
+  };
+
+  // 서버로 장비 추가
+  addDevice = async (device) => {
+    // DeviceDetailCompParts comp에서 받은 데이터를
+    // db 전달후 정상 처리시 아래 컴포넌트에 전달한다.
+    if (device === null) {
+      return;
+    }
+    const urlInfo = '/devicePart/addDevice';
+    const headerInfo = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    };
+    const data = await requestProxy(urlInfo, headerInfo, device, this.state).then(function(res) {
+        return res;
+    });
+
+    if (data.device.deviceId === undefined || data.device.deviceId === 0) {
+      return;
+    }
+    // 서버에 추가된 data로 초기화
+    this.setState ({
+      devicePartContainer : {
+        ...this.state.devicePartContainer,
+        deviceModel : data.device.deviceModel,
+        deviceCategory : data.device.deviceCategory,
+        deviceSerialNumber : data.device.deviceSerialNumber,
+        cpuInfo : data.device.cpuInfo,
+        ramInfo : data.device.ramInfo,
+        volumeInfo : data.device.volumeInfo,
+        deviceId : data.device.deviceId,
+      }
+    });
+  };
+// 서버로 부품 추가
+addPartStandAlone = async (part) => {
+  // DeviceDetailCompParts comp에서 받은 데이터를
+  // db 전달후 정상 처리시 아래 컴포넌트에 전달한다.
+  if (part === null) {
+    return;
+  }
+  const urlInfo = '/devicePart/addPart';
+  const headerInfo = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + localStorage.getItem('token')
+  };
+  const data = await requestProxy(urlInfo, headerInfo, part, this.state).then(function(res) {
+      return res;
+  });
+
+  if (data.part === undefined || data.part === null) {
+    return;
+  }
+  // 초기화 this.state.arrayvar.concat([newelement])
+  this.setState ({
+    devicePartContainer : {
+      ...this.state.devicePartContainer,
+      parts : [...this.state.devicePartContainer.parts, data.part]
+    }
+  });
+};
+
   render() {
-    const {devicePartContainer} = this.state;
-    const parts = devicePartContainer.parts;
+    const { devicePartContainer } = this.state;
+    const { parts } = devicePartContainer;
 
     return (
       <div>
-        <div className="row">
+        <div className="row nopadding">
           <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             <Card style={{ width: '18rem' }}>
               <Card.Header className="text-center">관리정보</Card.Header>
@@ -120,43 +226,14 @@ class DeviceDetailComp extends Component {
               </ListGroup>
             </Card>
           </div>
-          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <Card style={{ width: '18rem' }}>
-              <Card.Header className="text-center">장비정보</Card.Header>
-              <ListGroup variant="flush">
-                <ListGroup.Item>장비명: <span className="deviceInfo">{devicePartContainer.deviceModel}</span></ListGroup.Item>
-                <ListGroup.Item>시리얼넘버: <span className="deviceInfo">{devicePartContainer.deviceSerialNumber}</span></ListGroup.Item>
-                <ListGroup.Item>CPU: <span className="deviceInfo">{devicePartContainer.cpuInfo}</span></ListGroup.Item>
-                <ListGroup.Item>RAM: <span className="deviceInfo">{devicePartContainer.ramInfo}</span></ListGroup.Item>
-                <ListGroup.Item>VOLUME: <span className="deviceInfo">{devicePartContainer.volumeInfo}</span></ListGroup.Item>
-              </ListGroup>
-            </Card>
-          </div>
-          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <Card style={{ width: '18rem' }}>
-              <Card.Header className="text-center">
-                <Nav variant="tabs">
-                { parts !== undefined && parts.length > 0
-                  && parts.map ((part,index) => {
-                    const number = index +1;
-                    return (<Nav.Item>
-                              <Nav.Link index={index} className="partTab" onClick={this.doPartInfo}>부품{index + 1}</Nav.Link>
-                            </Nav.Item>);
-                  })}
-                  <Nav.Item>
-                    <Nav.Link>
-                        <FontAwesomeIcon icon={faPlus} />
-                    </Nav.Link>
-                  </Nav.Item>
-                </Nav>
-              </Card.Header>
-              <ListGroup variant="flush">
-                <ListGroup.Item>부품명:<span className="partInfo"></span></ListGroup.Item>
-                <ListGroup.Item>제조사:<span className="partInfo"></span></ListGroup.Item>
-                <ListGroup.Item>분류:<span className="partInfo"></span></ListGroup.Item>
-              </ListGroup>
-            </Card>
-          </div>
+          {/* 장비의 정보/추가 컴포넌트 */}
+          <DeviceDetailCompDevice  devicePartContainer = { devicePartContainer } addDevice = { this.addDevice} />
+          {/* 부품의 정보/추가 컴포넌트 */}
+          {
+            devicePartContainer.deviceId > 0 ?
+            <DeviceDetailCompParts parts = { parts } addPart = { this.addPartInDevice }/> :
+            <DeviceDetailCompParts parts = { parts } addPart = { this.addPartStandAlone }/>
+          }
           <div class="w-100"></div>
           <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             <Card style={{ width: '18rem' }}>

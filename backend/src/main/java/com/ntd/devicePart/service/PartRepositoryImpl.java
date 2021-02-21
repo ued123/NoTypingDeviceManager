@@ -2,10 +2,14 @@ package com.ntd.devicePart.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ntd.devicePart.params.DevicePartContainer;
 import com.ntd.entity.DevicePartEntityBinder;
@@ -24,6 +28,9 @@ public class PartRepositoryImpl extends QuerydslRepositorySupport {
 
 	private final static Logger logger = LoggerFactory.getLogger(PartRepositoryImpl.class);
 
+	@PersistenceContext
+	private EntityManager entityManager;
+
 	public PartRepositoryImpl() {
 		super(Part.class);
 	}
@@ -34,6 +41,7 @@ public class PartRepositoryImpl extends QuerydslRepositorySupport {
 	 * @param devicePartContainer
 	 * @return
 	 */
+	@Transactional(readOnly = true)
 	public List<Part> findPartsByColumns(DevicePartContainer devicePartContainer) {
 
 		List<Part> parts = null;
@@ -43,7 +51,7 @@ public class PartRepositoryImpl extends QuerydslRepositorySupport {
 			return parts;
 		}
 
-		JPAQueryFactory queryFactory = new JPAQueryFactory(getEntityManager());
+		JPAQueryFactory queryFactory = new JPAQueryFactory(this.entityManager);
 		BooleanBuilder builder = new BooleanBuilder();
 		builder.and(QPart.part.partModel.contains(devicePartContainer.getPartModel()));
 		if (!devicePartContainer.getPartManufactor().isEmpty()) {
@@ -59,6 +67,7 @@ public class PartRepositoryImpl extends QuerydslRepositorySupport {
 	 * @param devicePartContainer
 	 * @param devicePartList
 	 */
+	@Transactional(readOnly = true)
 	public DevicePartEntityBinder findPartByPartId(DevicePartContainer devicePartContainer) {
 		
 		Part part = null;
@@ -66,10 +75,27 @@ public class PartRepositoryImpl extends QuerydslRepositorySupport {
 		if (devicePartContainer.getPartId() <= 0) {
 			return part;
 		}
-		JPAQueryFactory queryFactory = new JPAQueryFactory(getEntityManager());
+		JPAQueryFactory queryFactory = new JPAQueryFactory(this.entityManager);
 		BooleanBuilder builder = new BooleanBuilder();
 		builder.and(QPart.part.partId.eq(devicePartContainer.getPartId()));
 		part = queryFactory.selectFrom(QPart.part).where(builder).fetchOne();
+		return part;
+	}
+
+	/**
+	 * DB TABLE: part에 데이터 추가
+	 * @param devicePartContainer
+	 * @return
+	 */
+	@Transactional(readOnly = false)
+	public DevicePartEntityBinder addPart(DevicePartContainer devicePartContainer) {
+		// frontEnd에서 받은 데이터를 entity로 전달
+		Part part = devicePartContainer.convertPart();
+		// entity 데이터를 persist 수행시 영속성 컨텍스트에서 관리하며, 
+		// commit 후 entity는 DB와 동기화가 된다.
+		// 그리고 이 영속성들은 cache에서 관리하게 된다.
+		this.entityManager.persist(part);
+		this.entityManager.flush();
 		return part;
 	}
 

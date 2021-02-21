@@ -36,7 +36,7 @@ class DevicePrimarySearch extends Component {
     // 태그 이름을 쪼개어, state 변수에 할당한다.
     const searchTextList = document.getElementsByClassName("search-text");
     const length = searchTextList.length;
-    for (let i=0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
       searchTextList[i].value = "";
     }
     let {devicePartContainer} = this.state;
@@ -51,7 +51,7 @@ class DevicePrimarySearch extends Component {
     const value = e.target.value;
     const dataTypeLeng = dataTypeList.length;
     let currentDataType = this.state;
-    for (let i=0;i<dataTypeLeng;i++){
+    for (let i = 0; i < dataTypeLeng; i++){
       let dataType = dataTypeList[i];
       if (i === (dataTypeLeng-1)) {
           // 변수값 입력
