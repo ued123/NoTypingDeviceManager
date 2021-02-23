@@ -32,7 +32,7 @@ class Device extends Component {
             doSearchDefault : false
     },
     isSearchOne : true,
-    isRsetParts : true,
+    isRsetDeviceParts : true,
     showDetail : false,
     isSearchList : true,
     devicePrimaryCompListIsMount : false,
@@ -58,7 +58,7 @@ class Device extends Component {
       // lifeCycle 발생
       this.setState({
         'isSearchOne' : true,
-        'isRsetParts' : true,
+        'isRsetDeviceParts' : true,
 
       });
 
@@ -68,7 +68,7 @@ class Device extends Component {
       // this.setState 함수를 사용시, state 값이 변하면 component 렌더링을 수행한다.
       // thist.state.xx 를 통해 값을 변경할 경우는 렌더링을 수행하지 않는다.
       this.setState({
-                      isRsetParts : false,
+                      isRsetDeviceParts : true,
                     });
   };
 
@@ -79,7 +79,7 @@ class Device extends Component {
       this.setState({
                       isSearchOne : false,
                       isSearchList : false,
-                      isRsetParts : true,
+                      isRsetDeviceParts : true,
                       devicePrimaryCompListIsMount : true
                     });
   };
@@ -87,7 +87,7 @@ class Device extends Component {
   render() {
     const history = this.props.history;
     //장비,부품 질의에 필요한 변수, 상세검색 노출 , 검색 체크
-    const {devicePartContainer, showDetail, isSearchOne, isRsetParts, isSearchList} = this.state;
+    const {devicePartContainer, showDetail, isSearchOne, isRsetDeviceParts, isSearchList} = this.state;
     return (
         <div className="row height-100 nopadding">
           {/* Header */}
@@ -119,7 +119,7 @@ class Device extends Component {
                 <h5><span className="badge badge-primary w-50 detail-title p-3">컴퓨터 관리</span></h5>
               </div>
               <ul className="list-group w-100">
-                <DeviceDetailComp isSearchOne = {isSearchOne} isRsetParts = {isRsetParts} doSearchInitialize = {this.doSearchInitialize} devicePartContainer={devicePartContainer} stopPartInitialize = {this.stopPartInitialize} history = {history}/>
+                <DeviceDetailComp isSearchOne = {isSearchOne} isRsetDeviceParts = {isRsetDeviceParts} doSearchInitialize = {this.doSearchInitialize} devicePartContainer={devicePartContainer} stopPartInitialize = {this.stopPartInitialize} history = {history}/>
               </ul>
             </div>
           </div>

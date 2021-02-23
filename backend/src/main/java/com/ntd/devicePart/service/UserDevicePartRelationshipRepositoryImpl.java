@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ntd.devicePart.exception.DevicePartException;
 import com.ntd.devicePart.params.DevicePartContainer;
 import com.ntd.entity.DevicePartEntityBinder;
 import com.ntd.entity.Part;
@@ -72,9 +71,11 @@ public class UserDevicePartRelationshipRepositoryImpl extends QuerydslRepository
 	@Transactional(readOnly = false)
 	public DevicePartEntityBinder addUserDevicePartRelationshipAndPart(DevicePartContainer devicePartContainer) throws Exception{
 		// 1. user_device_part_relationship 테이블에 장비 정보 존재 체크
+		/*
 		if (findUserDevicePartRelationshipByColumns(devicePartContainer) == null) {
 			throw new DevicePartException("NOT FOUND deviceId IN TABLE user_device_part_relationship");
 		}
+		*/
 		// 2. 부품 테이블에 정보 추가
 		 Part part = devicePartContainer.convertPart();
 		this.entityManager.persist(part);
@@ -84,7 +85,7 @@ public class UserDevicePartRelationshipRepositoryImpl extends QuerydslRepository
 		userDevicePartRelationship.setPartId(part.getPartId());
 		this.entityManager.persist(userDevicePartRelationship);
 		this.entityManager.flush();
-		return userDevicePartRelationship;
+		return part;
 	}
 
 }

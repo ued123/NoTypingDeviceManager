@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.ntd.devicePart.exception.DevicePartException;
 import com.ntd.devicePart.params.DevicePartContainer;
 import com.ntd.devicePart.service.DevicePartManager;
 import com.ntd.entity.DevicePartEntityBinder;
@@ -38,7 +39,7 @@ public class DevicePartManagerTest {
 
 
 	/**
-	 * 테이블: device, part에서 데이터를 가져온다. 
+	 * 컬럼 조건을 통해 장비, 부품 테이블에 질의후 얻은 데이터드을 반환 
 	 */
 	@Test
 	public void getDevicesOrPartsByColumnsTest() {
@@ -53,12 +54,98 @@ public class DevicePartManagerTest {
 			for (DevicePartEntityBinder devicePart : deviceParts) {
 				builder.append(devicePart.obtainDeviceOrPartModel()).append(", ");
 			}
-			logger.info("TEST > getDevicesOrPartsByColumns > deviceParts's size 4 ? > RESULT: {}, SIZE: {}",
-					(deviceParts.size() == 4) ? "YES" : "NO", deviceParts.size());
+			logger.info("TEST > getDevicesOrPartsByColumns > deviceParts's size: {}", deviceParts.size());
 		} catch (Exception e) {
 			logger.info("TEST > getDevicesOrPartsByColumns > ERROR > {}", e.getMessage(), e);
 		}
 
+	}
+
+
+	/**
+     * 컬럼의 고유식별자를 통해 장비, 부품 테이블에 질의후 얻은 데이터를, DevicePartContainer에 복사 
+	 * @param devicePartContainer
+	 * @return
+	 */
+	@Test
+    public void setDeviceOrPartsByIdInDevicePartContainerTest () {
+    	try {
+    		DevicePartContainer devicePartContainer = new DevicePartContainer();
+    		// 장비만 조회
+    		devicePartContainer.setDeviceId(3);
+    		devicePartManager.setDeviceOrPartsByIdInDevicePartContainer(devicePartContainer);
+			logger.info("TEST > setDeviceOrPartsByIdInDevicePartContainer > only device > deviceInfo: {}, parts'size: {}", devicePartContainer.getDeviceModel(), devicePartContainer.getParts().size());
+			// 부품만 조회
+			devicePartContainer.setDeviceId(0);
+			devicePartContainer.setPartId(3);
+			devicePartManager.setDeviceOrPartsByIdInDevicePartContainer(devicePartContainer);
+			logger.info("TEST > setDeviceOrPartsByIdInDevicePartContainer > only parts > deviceInfo: {}, parts'size: {}", devicePartContainer.getDeviceModel(), devicePartContainer.getParts().size());
+			// 장비와 장착된 부품 조회
+			devicePartContainer.setDeviceId(1);
+			devicePartContainer.setPartId(0);
+			devicePartManager.setDeviceOrPartsByIdInDevicePartContainer(devicePartContainer);
+			logger.info("TEST > setDeviceOrPartsByIdInDevicePartContainer > device and added parts > deviceInfo: {}, parts'size: {}", devicePartContainer.getDeviceModel(), devicePartContainer.getParts().size());
+			
+		} catch (Exception e) {
+			logger.info("TEST > setDeviceOrPartsByIdInDevicePartContainer > ERROR > {}", e.getMessage(), e);
+		}
+
+    }
+
+	/**
+     * 부품 테이블에 추가후 devicePartContainer에 저장 테스트
+	 * @param devicePartContainer
+	 * @return
+	 */
+	@Test
+	public void addPartAfterSetDevicePartContainerTest() {
+
+		try {
+			DevicePartContainer devicePartContainer = new DevicePartContainer();
+			devicePartContainer.setPartModel("TEST DDR4 222GB");
+			devicePartContainer.setPartCategory("R");
+			devicePartContainer.setPartManufactor("TEST");
+			devicePartManager.addPartAfterSetDevicePartContainer(devicePartContainer);
+			// 성공시 table에 추가된 part_id값이 객체에 할당됨
+			logger.info("TEST > addPartAfterSetDevicePartContainerTest > partId: {}", devicePartContainer.getPartId());
+			// device에 part 부품을 장착시
+			devicePartContainer.setDeviceId(1);
+			devicePartContainer.setPartId(0);
+			devicePartContainer.setPartModel("LGT ODD 52x");
+			devicePartContainer.setPartCategory("O");
+			devicePartContainer.setPartManufactor("LGT");
+			// 성공시 table에 추가된 part_id값이 객체에 할당됨, 장비_부품 관계 테이블에도 데이터 추가
+			devicePartManager.addPartAfterSetDevicePartContainer(devicePartContainer);
+			logger.info("TEST > addPartAfterSetDevicePartContainerTest > partId: {}", devicePartContainer.getPartId());
+		} catch (Exception e) {
+			logger.info("TEST > addPartAfterSetDevicePartContainerTest > ERROR > {}", e.getMessage(), e);
+		}
+	}
+
+	/**
+     * 장비 테이블에 추가후 devicePartContainer에 저장 테스트 
+	 * @param devicePartContainer
+	 * @return
+	 */
+	@Test
+	public void addDeviceAfterSetDevicePartContainerTest() throws DevicePartException {
+
+		try {
+			DevicePartContainer devicePartContainer = new DevicePartContainer();
+			devicePartContainer.setDeviceCategory("D");
+			devicePartContainer.setDeviceInfo("TEST DEVICE INFO");
+			devicePartContainer.setDeviceModel("TEST DESKTOP");
+			devicePartContainer.setDeviceSerialNumber("TTTT");
+			devicePartContainer.setCpuInfo("TEST AMD 123");
+			devicePartContainer.setRamInfo("TEST RAM 16GB");
+			devicePartContainer.setVolumeInfo("TEST HDD 1TB");
+			devicePartManager.addDeviceAfterSetDevicePartContainer(devicePartContainer);
+			// 성공시 table에 추가된 device_id값이 객체에 할당됨
+			logger.info("TEST > addDeviceAfterSetDevicePartContainerTest > deviceId: {}", devicePartContainer.getDeviceId());
+			
+		} catch (Exception e) {
+			logger.info("TEST > addDeviceAfterSetDevicePartContainerTest > ERROR > {}", e.getMessage(), e);
+		}
 	}
 
 }

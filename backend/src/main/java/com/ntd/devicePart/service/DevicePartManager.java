@@ -89,8 +89,8 @@ public class DevicePartManager {
 			if (devicePartContainer.getDeviceId() > 0) {
 				addedPart = userDevicePartRelationshipRepo.addUserDevicePartRelationshipAndPart(devicePartContainer);
 			}
+			// 일반 부품 정보 추가
 			if (addedPart == null) {
-				// 일반 부품 정보 추가
 				addedPart = partRepo.addPart(devicePartContainer);
 			}
 		} catch (Exception e) {
@@ -113,6 +113,23 @@ public class DevicePartManager {
 			throw new DevicePartException(e);
 		}
 		devicePartContainer.setDevice((Device) addedDevice);
+		
+	}
+
+	/**
+     * 장비 테이블에 추가 
+	 * @param devicePartContainer
+	 * @return
+	 */
+	public void modifyDeviceAfterSetDevicePartContainer(DevicePartContainer devicePartContainer) throws DevicePartException {
+		DevicePartEntityBinder modifiedDevice = null;
+		try {
+			// 장비 정보 추가
+			modifiedDevice = deviceRepo.modfiyDevice(devicePartContainer);
+		} catch (Exception e) {
+			throw new DevicePartException(e);
+		}
+		devicePartContainer.setDevice((Device) modifiedDevice);
 		
 	}
 

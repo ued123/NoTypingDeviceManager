@@ -3,6 +3,7 @@ package com.ntd.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,7 +37,7 @@ public class Part  implements DevicePartEntityBinder{
 	@Column(name = "part_manufactor")
 	private String partManufactor;
 
-    @ManyToMany(mappedBy = "parts", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "parts", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private Set<Device> devices = new HashSet<>();
 
 	public long getPartId() {

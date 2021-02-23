@@ -5,6 +5,7 @@ import desktopBody from '../../img/desktopBody.png';
 import monitor from '../../img/monitor.png';
 import disk from '../../img/disk.png';
 import ram from '../../img/ram.png';
+import pack from '../../img/pack.png';
 
 import  './Device.css';
 
@@ -26,7 +27,7 @@ class DevicePrimaryComp extends Component {
       장비 검색후 기본 정보 UI
       */
       const {devicePart} = this.props;
-
+      
       return (
               <li className="list-group-item m-2 labtop-color">
                 <span className="p-2">
@@ -34,6 +35,8 @@ class DevicePrimaryComp extends Component {
                     (function() {
                       if (devicePart.deviceCategory === 'M') {
                         return (<img className="magnifier-cmp" src={monitor}/>);
+                      } else if (devicePart.deviceCategory === 'C' ){
+                        return (<img className="magnifier-cmp" src={labtop}/>);
                       } else if (devicePart.deviceCategory === 'D') {
                         return (<img className="magnifier-cmp" src={desktopBody}/>);
                       } else if (devicePart.partCategory === 'S' ||devicePart.partCategory === 'H') {
@@ -41,7 +44,7 @@ class DevicePrimaryComp extends Component {
                       } else if (devicePart.partCategory === 'R' ) {
                         return (<img className="magnifier-cmp" src={ram}/>);
                       } else {
-                        return (<img className="magnifier-cmp" src={labtop}/>);
+                        return (<img className="magnifier-cmp" src={pack}/>);
                       }
                     })()
                   }

@@ -21,9 +21,6 @@
 }
 
 .deviceDetailWrapper {
-	height: -moz-calc(100% - 60px);
-	height: -webkit-calc(100% - 60px);
-	height: calc(100% - 60px);
 	overflow-y: scroll;
 }
 
@@ -76,4 +73,20 @@
 	word-wrap: normal !important;
   white-space: normal;
 	padding-right: 5px !important;
+}
+
+.deviceInfo {
+	width: 70%;
+}
+.deviceInfoModifer {
+	float: right;
+}
+
+.deviceInfoModifer::after {
+	clear: both;
+}
+
+.devicePartModifyBorder {
+		border-color: #ff80ff;
+		box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(255, 100, 255, 0.5);
 }

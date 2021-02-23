@@ -111,5 +111,30 @@ public class DevicePartController {
 
 		return requestResultContainer;
 	}
+	/**
+	 * modifyDevice URL 요청 처리하는 함수
+	 * @param devicePartContainer
+	 * @param authentication
+	 * @return
+	 */
+	@PostMapping(path = "/modifyDevice", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> processURLOfModifyDevice(@RequestBody DevicePartContainer devicePartContainer, Authentication authentication) {
+		Map<String, Object> requestResultContainer = new HashMap<>();
+		// 정상 추가 되엇는지 시그널만 확인
+		String responseMsg = "200. Success OK.";
+		try {
+			// 로그인 인증 체크 
+			AuthenticationExceptionImpl.checkAuthentication(authentication);
+			devicePartManager.modifyDeviceAfterSetDevicePartContainer(devicePartContainer);
+			requestResultContainer.put("device", devicePartContainer);
+		} catch (AuthenticationExceptionImpl | DevicePartException e) {
+			logger.warn("ERROR > requestResultContainer > Exception > {}", e.getMessage(), e);
+			responseMsg = e.getMessage();
+		} finally {
+			requestResultContainer.put(Characters.RESPONSE, responseMsg);
+		}
+
+		return requestResultContainer;
+	}
 
 }

@@ -1,85 +1,237 @@
 import React, { Component} from 'react';
 import { Card, ListGroup} from 'react-bootstrap';
 import  './Device.css';
+import '../../components/common/Common.css';
+import modifyText from '../../img/modifyText.png';
 
 /**
  상세 장비 정보에서 장비 부분 UI 담당
 **/
 class DeviceDetailCompDevice extends Component {
+  constructor(props) {
+    	super(props);
+        this.state = {
+          deviceId : {
+            prefix: "",
+            value : (props.deviceId === undefined)? "" : props.deviceId,
+            clearTextField : false,
+            readOnly : false
+          },
+          deviceCategory : {
+            prefix: "분류:",
+            value : (props.deviceCategory === undefined)? "" : props.deviceCategory,
+            clearTextField : false,
+            readOnly : false
+          },
+          deviceModel : {
+            prefix: "장비명:",
+            value : (props.deviceModel === undefined)? "" : props.deviceModel,
+            clearTextField : false,
+            readOnly : false
+          },
+          deviceSerialNumber : {
+            prefix: "S/N:",
+            value : (props.deviceSerialNumber === undefined)? "" : props.deviceSerialNumber,
+            clearTextField : false,
+            readOnly : false
+          },
+          cpuInfo : {
+            prefix: "CPU:",
+            value : (props.cpuInfo === undefined)? "" : props.cpuInfo,
+            clearTextField : false,
+            readOnly : false
+          },
+          ramInfo : {
+            prefix: "RAM:",
+            value : (props.ramInfo === undefined)? "" : props.ramInfo,
+            clearTextField : false,
+            readOnly : false
+          },
+          volumeInfo : {
+            prefix: "볼륨:",
+            value : (props.volumeInfo === undefined)? "" : props.volumeInfo,
+            clearTextField : false,
+            readOnly : false
+          },
+          deviceInfo : {
+            prefix: "장비정보:",
+            value : (props.deviceInfo === undefined)? "" : props.deviceInfo,
+            clearTextField : false,
+            readOnly : false
+          },
+          // deviceFieldKeys : ["deviceModel", "deviceSerialNumber", "cpuInfo", "ramInfo", "volumeInfo", "deviceId"],
+          deviceFieldKeys : ["deviceModel", "deviceSerialNumber", "cpuInfo", "ramInfo", "volumeInfo"],
+          updateUI : false,
+        };
+    };
+  // 수정 UI 클릭 이벤트 리스너
+  onClickDeviceInfoModifer = (e) => {
+    const deviceCompName = e.target.previousSibling.name
+    // 수정 UI 클릭시, 그 이전 element를 호출한다.
+    const deviceComp = this.state[deviceCompName];
+    // state에 변경 옵션을 노출한다.
+    // deviceField를 수정 가능하게 처리한다.
+    this.setState ({
+      [deviceCompName] :{
+        ...deviceComp,
+        readOnly : !deviceComp.readOnly
+      }
+    });
 
-  // 부품 정보 노출
-  showDeivceInfo = (selectPartIndex) => {
-    const devicePartContainer = this.props.devicePartContainer;
-
-    let deviceInfoToDisplays = document.getElementsByClassName("deviceInfo");
-    // device 정보란 input tag ReadOnly 활성화 처리
-    for (let i = 0; i < deviceInfoToDisplays.length; i++) {
-      deviceInfoToDisplays[i].readOnly= true;
-    }
-    deviceInfoToDisplays[0].value = devicePartContainer.deviceModel;
-    deviceInfoToDisplays[1].value = devicePartContainer.deviceSerialNumber;
-    deviceInfoToDisplays[2].value = devicePartContainer.cpuInfo;
-    deviceInfoToDisplays[3].value = devicePartContainer.ramInfo;
-    deviceInfoToDisplays[4].value = devicePartContainer.volumeInfo;
-    deviceInfoToDisplays[5].value = devicePartContainer.deviceCategory;
-    deviceInfoToDisplays[6].value = devicePartContainer.deviceId;
   }
 
-  // 장비 부품 selectBox 선택시 함수 이벤트 처리
+  // dropdown에서 장비정보 선택시 이벤트 핸들러
   onSelectedDeviceEventHandler = (e) => {
-    // 부품 정보화면 초기화
-    this.rsetDeviceInfoElementValues ();
-    // selectBox 선택된 값이 숫자일때는 정보를 노출한다.
+    // device 장비 정보가 있는 dropdown 이벤트일때만 처리
     const selectPartIndex = parseInt(e.target.value);
+    let deviceAddModifyBtn = document.getElementsByClassName("deviceAddModify")[0];
+    const devicePartContainer = this.props.devicePartContainer;
+    const {deviceFieldKeys} = this.state;
+    let isClearTextField = false;
+    let updateUI = true;
+    let deviceContainer = {};
+    // 장비정보를 추가해야할때, 기존 textField 초기화
+    // updateUI 비활성화 처리한다.
     if (isNaN(selectPartIndex)){
-      return;
+      isClearTextField = !isClearTextField;
+      updateUI = !updateUI;
     }
-    this.showDeivceInfo(selectPartIndex);
-  }
-  // 장비 부품 초기화
-  rsetDeviceInfoElementValues = () => {
-    let deviceInfoToDisplays = document.getElementsByClassName("deviceInfo");
-    // 부품 정보 초기화
-    for (let i = 0; i < deviceInfoToDisplays.length; i++) {
-      deviceInfoToDisplays[i].value = "";
-      deviceInfoToDisplays[i].readOnly= false;
+    const deviceFields = [];
+    // DeviceDetailComp에서 전달해준 변수중에 deviceTextField 매핑되는 UI를 생성
+    for (const [index, value] of deviceFieldKeys.entries()) {
+        //items.push(<li key={index}>{value}</li>)
+        const deviceComp = this.state[value];
+        deviceContainer[value] = {
+          ...this.state[value],
+          value : devicePartContainer[value],
+          clearTextField : isClearTextField,
+          // updateUI 수정 버튼 노출 여부이고, 이게 활성화 되더라도
+          // 바로 수정할수는 없다
+          readOnly : updateUI
+        };
     }
+
+    deviceContainer.updateUI = updateUI;
+    this.setState (deviceContainer);
   }
 
-  // 추가할 장비 데이터를 상위 컴포넌트로 전달
+  // 추가할 정보를 상위 컴포넌트로 전달
   propaGateAddDevice = (e) => {
-    // 추가할 부품 정보 있는지 체크
-    const deviceInfoToDisplays = document.getElementsByClassName("deviceInfo");
-    for (let i = 0; i < deviceInfoToDisplays.length - 1; i++) {
-        if (deviceInfoToDisplays[i].value.length === 0) {
+    const {deviceFieldKeys} = this.state;
+    const devicePartContainer = this.props.devicePartContainer;
+    let rsetDeviceComps = {};
+    let toAddDeviceInfo = {
+      'deviceCategory' : devicePartContainer.deviceCategory,
+      'deviceInfo' : devicePartContainer.deviceInfo,
+      'deviceId' : devicePartContainer.deviceId,
+    };
+    // DeviceDetailComp에서 전달해준 변수중에 deviceTextField 매핑되는 UI를 생성
+    for (const [index, value] of deviceFieldKeys.entries()) {
+        // state 에 저장된 변수를 deep copy하여 저장
+        const deviceComp = {...this.state[value]};
+        toAddDeviceInfo [value] = deviceComp.value;
+        if (value === 'deviceId') {
+          continue;
+        }
+        if (deviceComp.value.length === 0) {
           alert("장비 정보를 입력해 주세요.");
-          return;
+          continue;
+        }
+        rsetDeviceComps[value] = {
+          ...this.state[value],
+          clearTextField : true,
+          readOnly : false
         }
     }
-    // 추가된 정보를 바탕으로 상위 데이터로 전달
-    this.props.addDevice ({
-      "deviceModel" : deviceInfoToDisplays[0].value,
-      "deviceSerialNumber" : deviceInfoToDisplays[1].value,
-      "cpuInfo" : deviceInfoToDisplays[2].value,
-      "ramInfo" : deviceInfoToDisplays[3].value,
-      "volumeInfo" : deviceInfoToDisplays[4].value,
-      "deviceCategory" : deviceInfoToDisplays[5].value,
+    // 정보 추가후 초기화
+    this.setState({
+      ...rsetDeviceComps,
+      updateUI: false
     });
+    // 추가된 정보를 바탕으로 상위 데이터로 전달
+    this.props.addDevice (toAddDeviceInfo);
   };
 
+  // 수정할 정보를 상위 컴포넌트로 전달
+  propaGateModifyDevice = (e) => {
+    const {deviceFieldKeys} = this.state;
+    const devicePartContainer = this.props.devicePartContainer;
+    let rsetDeviceComps = {};
+
+    let toAddDeviceInfo = {
+      'deviceCategory' : devicePartContainer.deviceCategory,
+      'deviceInfo' : devicePartContainer.deviceInfo,
+      'deviceId' : devicePartContainer.deviceId,
+    };
+
+    // DeviceDetailComp에서 전달해준 변수중에 deviceTextField 매핑되는 UI를 생성
+    for (const [index, value] of deviceFieldKeys.entries()) {
+        // state 에 저장된 변수를 deep copy하여 저장
+        const deviceComp = {...this.state[value]};
+        toAddDeviceInfo [value] = deviceComp.value;
+        if (value === 'deviceId') {
+          continue;
+        }
+        if (deviceComp.value.length === 0) {
+          alert("장비 정보를 입력해 주세요.");
+          continue;
+        }
+        rsetDeviceComps[value] = {
+          ...this.state[value],
+          clearTextField : true,
+          readOnly : false
+        }
+    }
+    // 정보 추가후 초기화
+    this.setState({
+      ...rsetDeviceComps,
+      updateUI: false
+    });
+    // 추가된 정보를 바탕으로 상위 데이터로 전달
+    this.props.modifyDevice (toAddDeviceInfo);
+  };
+
+  // deviceField 변경시 이벤트
+  onChangeInputValue = (event) => {
+      const deviceComp = this.state[event.target.name];
+      this.setState({
+          [event.target.name] : {
+            ...deviceComp,
+            value : event.target.value,
+          }
+      });
+   }
 
   render() {
-    const devicePartContainer = this.props.devicePartContainer;
-    this.rsetDeviceInfoElementValues ();
+    const {devicePartContainer} = this.props;
+    const {updateUI, deviceFieldKeys} = this.state;
     let subStrDeviceModel = devicePartContainer.deviceModel;
     if (subStrDeviceModel.length > 18 ) {
         subStrDeviceModel = subStrDeviceModel.substr(0, 19).trim() + "...";
     }
+    const deviceFields = [];
+    // DeviceDetailComp에서 전달해준 변수중에 deviceTextField 매핑되는 UI를 생성
+    for (const [index, value] of deviceFieldKeys.entries()) {
+        //items.push(<li key={index}>{value}</li>)
+        const deviceComp = this.state[value];
+        let deviceField =
+        (<ListGroup.Item>
+          {deviceComp.prefix}
+            <span className="deviceInfoWrapper">
+              <input type="text" name={value} className={`deviceInfo border-none outline-none ${updateUI ? (deviceComp.readOnly ? "" : "devicePartModifyBorder") :""}`}
+                    value={ deviceComp.clearTextField? '' : deviceComp.value}
+                    onChange={this.onChangeInputValue} readOnly = {deviceComp.readOnly}/>
+              <img className={`deviceInfoModifer magnifier-cmp ${updateUI ? "" : "hidden" }`}
+              src={modifyText} onClick={this.onClickDeviceInfoModifer} />
+            </span>
+        </ListGroup.Item>);
+        deviceFields.push (deviceField);
+    }
     return (
-      <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-        <Card style={{ width: '18rem' }}>
+      <div className="col-xs col-sm col-md col-lg">
+        <Card>
           <Card.Header className="text-center">
-            <select className="form-control devicePart-text-overflow-hidden" aria-label="Default select example" onChange={this.onSelectedDeviceEventHandler}>
+            <select className="form-control devicePart-text-overflow-hidden display-inline" aria-label="Default select example" onChange={this.onSelectedDeviceEventHandler}>
               <option value="theme" selected>장비 정보</option>
               { devicePartContainer.deviceId > 0 &&
                 <option className="devicePart-text-overflow-hidden" value="0">{subStrDeviceModel}</option>
@@ -87,16 +239,11 @@ class DeviceDetailCompDevice extends Component {
             </select>
           </Card.Header>
           <ListGroup variant="flush">
-            <ListGroup.Item>장비명: <span><input type="text" className="deviceInfo border-none outline-none"/></span></ListGroup.Item>
-            <ListGroup.Item>S/N: <span><input type="text" className="deviceInfo border-none outline-none"/></span></ListGroup.Item>
-            <ListGroup.Item>CPU: <span><input type="text" className="deviceInfo border-none outline-none"/></span></ListGroup.Item>
-            <ListGroup.Item>RAM: <span><input type="text" className="deviceInfo border-none outline-none"/></span></ListGroup.Item>
-            <ListGroup.Item>볼륨: <span><input type="text" className="deviceInfo border-none outline-none"/></span></ListGroup.Item>
-            <ListGroup.Item>분류: <span><input type="text" className="deviceInfo border-none outline-none"/></span></ListGroup.Item>
-            <span className="hidden"><input type="text" className="deviceInfo border-none outline-none"/></span>
+            {deviceFields}
             <ListGroup.Item>
               <div className="text-align-center">
-                <button type="button" className="btn btn-danger btn-display-inline mx-auto pl-4 pr-4 mb-2" onClick={this.propaGateAddDevice}>추가</button>
+                <button type="button" className={`deviceAddModify btn btn-display-inline mx-auto pl-4 pr-4 mb-2 ${updateUI? "btn-primary" : "btn-danger"}`}
+                onClick={updateUI ? this.propaGateModifyDevice : this.propaGateAddDevice }>{updateUI? "수정" : "추가"}</button>
               </div>
             </ListGroup.Item>
           </ListGroup>

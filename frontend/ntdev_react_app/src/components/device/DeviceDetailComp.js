@@ -60,30 +60,10 @@ class DeviceDetailComp extends Component {
   // 부모딴에서 비지니스 로직제어해야함
   // 컴포넌트 변경시 두번의 렌더링 업데이트 수행하므로 제어
   componentDidUpdate(){
-    let { devicePartContainer, isSearchOne, isRsetParts, doSearchInitialize, stopPartInitialize } = this.props;
+    let { devicePartContainer, isSearchOne, doSearchInitialize, stopPartInitialize } = this.props;
     if (isSearchOne) {
       this.getDevicePart(devicePartContainer);
       doSearchInitialize ();
-      return;
-    }
-    // 일단 장비도 초기화 시키고, 나중에 따로 컴포넌트로 만들자
-    // 부품 상세점보 컴포넌트 초기화
-    if (isRsetParts) {
-      this.setState ({
-        devicePartContainer : {
-          ...this.state.devicePartContainer,
-          deviceId : 0,
-          deviceCategory : "",
-          deviceModel : "",
-          deviceSerialNumber : "",
-          cpuInfo : "",
-          ramInfo : "",
-          volumeInfo : "",
-          deviceInfo : "",
-          'parts' : []
-          }
-        });
-      stopPartInitialize ();
       return;
     }
   }
@@ -94,6 +74,7 @@ class DeviceDetailComp extends Component {
     if (devicePartContainer === null) {
       return;
     }
+
     // 초기화
     let eles = document.getElementsByClassName("partInfo");
     for (let i = 0; i < eles.length; i++) {
@@ -149,6 +130,42 @@ class DeviceDetailComp extends Component {
   };
 
   // 서버로 장비 추가
+  modifyDevice = async (device) => {
+    // DeviceDetailCompParts comp에서 받은 데이터를
+    // db 전달후 정상 처리시 아래 컴포넌트에 전달한다.
+    if (device === null) {
+      return;
+    }
+    const urlInfo = '/devicePart/modifyDevice';
+    const headerInfo = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    };
+
+    const data = await requestProxy(urlInfo, headerInfo,
+      { ...device,
+        'parts' : this.state.devicePartContainer.parts
+      }, this.state).then(function(res) { return res; });
+
+    if (data.device === undefined || data.device.deviceId === 0) {
+      return;
+    }
+
+    // 서버에 추가된 data로 초기화
+    this.setState ({
+      devicePartContainer : {
+        ...this.state.devicePartContainer,
+        deviceModel : data.device.deviceModel,
+        deviceCategory : data.device.deviceCategory,
+        deviceSerialNumber : data.device.deviceSerialNumber,
+        cpuInfo : data.device.cpuInfo,
+        ramInfo : data.device.ramInfo,
+        volumeInfo : data.device.volumeInfo,
+        deviceId : data.device.deviceId,
+      }
+    });
+  };
+  // 서버로 장비 추가
   addDevice = async (device) => {
     // DeviceDetailCompParts comp에서 받은 데이터를
     // db 전달후 정상 처리시 아래 컴포넌트에 전달한다.
@@ -164,7 +181,7 @@ class DeviceDetailComp extends Component {
         return res;
     });
 
-    if (data.device.deviceId === undefined || data.device.deviceId === 0) {
+    if (data.device === undefined || data.device.deviceId === 0) {
       return;
     }
     // 서버에 추가된 data로 초기화
@@ -178,9 +195,10 @@ class DeviceDetailComp extends Component {
         ramInfo : data.device.ramInfo,
         volumeInfo : data.device.volumeInfo,
         deviceId : data.device.deviceId,
+        parts : []
       }
     });
-  };
+};
 // 서버로 부품 추가
 addPartStandAlone = async (part) => {
   // DeviceDetailCompParts comp에서 받은 데이터를
@@ -215,7 +233,8 @@ addPartStandAlone = async (part) => {
 
     return (
       <div>
-        <div className="row nopadding">
+        <div className="row nopadding deviceDetailWrapper">
+        {/*
           <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             <Card style={{ width: '18rem' }}>
               <Card.Header className="text-center">관리정보</Card.Header>
@@ -226,8 +245,9 @@ addPartStandAlone = async (part) => {
               </ListGroup>
             </Card>
           </div>
+          */}
           {/* 장비의 정보/추가 컴포넌트 */}
-          <DeviceDetailCompDevice  devicePartContainer = { devicePartContainer } addDevice = { this.addDevice} />
+          <DeviceDetailCompDevice  devicePartContainer = { devicePartContainer } addDevice = { this.addDevice} modifyDevice = {this.modifyDevice} />
           {/* 부품의 정보/추가 컴포넌트 */}
           {
             devicePartContainer.deviceId > 0 ?
@@ -235,8 +255,8 @@ addPartStandAlone = async (part) => {
             <DeviceDetailCompParts parts = { parts } addPart = { this.addPartStandAlone }/>
           }
           <div class="w-100"></div>
-          <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <Card style={{ width: '18rem' }}>
+          <div className="col-xs col-sm col-md col-lg">
+            <Card>
               <Card.Header className="text-center">장비이력</Card.Header>
               <Card.Body>
                 <div className="form-group">

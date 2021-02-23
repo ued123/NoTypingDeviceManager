@@ -41,7 +41,7 @@ public class Device implements DevicePartEntityBinder{
 	@Column(name = "device_info")
 	private String deviceInfo;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE})
 	@JoinTable(name = "user_device_part_relationship", joinColumns = {
 			@JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "part_id", referencedColumnName = "part_id", nullable = false, updatable = false) })

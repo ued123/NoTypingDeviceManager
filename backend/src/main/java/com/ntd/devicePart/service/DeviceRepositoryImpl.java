@@ -94,6 +94,8 @@ public class DeviceRepositoryImpl extends QuerydslRepositorySupport {
 	}
 
 	/**
+	 * entity로 선언된 객체가 영속화 되지 않을떄 처리
+	 * Persist : New Entity ⇒ Managed Entity
 	 * DB TABLE: device에 데이터 추가
 	 * @param devicePartContainer
 	 * @return
@@ -106,6 +108,26 @@ public class DeviceRepositoryImpl extends QuerydslRepositorySupport {
 		// commit 후 entity는 DB와 동기화가 된다.
 		// 그리고 이 영속성들은 cache에서 관리하게 된다.
 		this.entityManager.persist(device);
+		this.entityManager.flush();
+		return device;
+	}
+
+	/**
+	 * entity로 선언된 객체가 영속화 된경우
+	 * Merge : Detached Entity ⇒ Managed Entity
+	 * DB TABLE: device에 데이터 수정
+	 * @param devicePartContainer
+	 * @return
+	 */
+	@Transactional(readOnly = false)
+	public DevicePartEntityBinder modfiyDevice(DevicePartContainer devicePartContainer) {
+		// frontEnd에서 받은 데이터를 entity로 전달
+		Device device = devicePartContainer.convertDevice();
+		device.setParts(devicePartContainer.getParts());
+		// entity 데이터를 persist 수행시 영속성 컨텍스트에서 관리하며, 
+		// commit 후 entity는 DB와 동기화가 된다.
+		// 그리고 이 영속성들은 cache에서 관리하게 된다.
+		this.entityManager.merge(device);
 		this.entityManager.flush();
 		return device;
 	}
