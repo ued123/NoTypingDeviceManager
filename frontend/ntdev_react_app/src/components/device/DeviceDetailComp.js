@@ -150,7 +150,7 @@ class DeviceDetailComp extends Component {
     if (data.device === undefined || data.device.deviceId === 0) {
       return;
     }
-
+    alert ("장비 정보가 변경되었습니다.");
     // 서버에 추가된 data로 초기화
     this.setState ({
       devicePartContainer : {
@@ -184,6 +184,7 @@ class DeviceDetailComp extends Component {
     if (data.device === undefined || data.device.deviceId === 0) {
       return;
     }
+    alert ("새로운 장비 정보 추가되었습니다.");
     // 서버에 추가된 data로 초기화
     this.setState ({
       devicePartContainer : {
@@ -198,34 +199,65 @@ class DeviceDetailComp extends Component {
         parts : []
       }
     });
-};
-// 서버로 부품 추가
-addPartStandAlone = async (part) => {
-  // DeviceDetailCompParts comp에서 받은 데이터를
-  // db 전달후 정상 처리시 아래 컴포넌트에 전달한다.
-  if (part === null) {
-    return;
-  }
-  const urlInfo = '/devicePart/addPart';
-  const headerInfo = {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + localStorage.getItem('token')
   };
-  const data = await requestProxy(urlInfo, headerInfo, part, this.state).then(function(res) {
-      return res;
-  });
-
-  if (data.part === undefined || data.part === null) {
-    return;
-  }
-  // 초기화 this.state.arrayvar.concat([newelement])
-  this.setState ({
-    devicePartContainer : {
-      ...this.state.devicePartContainer,
-      parts : [...this.state.devicePartContainer.parts, data.part]
+  // 서버로 부품 추가
+  addPartStandAlone = async (part) => {
+    // DeviceDetailCompParts comp에서 받은 데이터를
+    // db 전달후 정상 처리시 아래 컴포넌트에 전달한다.
+    if (part === null) {
+      return;
     }
-  });
-};
+    const urlInfo = '/devicePart/addPart';
+    const headerInfo = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    };
+    const data = await requestProxy(urlInfo, headerInfo, part, this.state).then(function(res) {
+        return res;
+    });
+
+    if (data.part === undefined || data.part === null) {
+      return;
+    }
+    // 초기화 this.state.arrayvar.concat([newelement])
+    this.setState ({
+      devicePartContainer : {
+        ...this.state.devicePartContainer,
+        parts : [...this.state.devicePartContainer.parts, data.part]
+      }
+    });
+  };
+  // 서버에 부품 정보 변경
+  modifyPartStandAlone = async (part) => {
+    // DeviceDetailCompParts comp에서 받은 데이터를
+    // db 전달후 정상 처리시 아래 컴포넌트에 전달한다.
+    if (part === null) {
+      return;
+    }
+    const urlInfo = '/devicePart/modifyPart';
+    const headerInfo = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    };
+    const data = await requestProxy(urlInfo, headerInfo, part, this.state).then(function(res) {
+        return res;
+    });
+
+    if (data.part === undefined || data.part === null) {
+      return;
+    }
+    const {parts} = this.state;
+    // 초기화 this.state.arrayvar.concat([newelement])
+    this.setState ({
+      devicePartContainer : {
+        ...this.state.devicePartContainer,
+        parts : parts.map (
+          part =>  data.part.partId === part.partId
+          ? data.part: part
+        )
+      }
+    });
+  };
 
   render() {
     const { devicePartContainer } = this.state;
